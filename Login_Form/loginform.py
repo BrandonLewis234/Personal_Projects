@@ -64,18 +64,28 @@ class winConfirmation(QWidget):
 class Ui_winLogin(object):
     def setupUI(self, winLogin):
         # Main window
+        WIN_SIZE       = [300, 250] # Window size parameters
+        WIN_RIGHT_DIST = 16         # Distrance from the right side of the window
+                                    # that is desired for certain widgets to follow
+
         winLogin.setObjectName("winLogin")
-        winLogin.resize(300, 250)
-        winLogin.setMinimumSize(QtCore.QSize(300, 250))
-        winLogin.setMaximumSize(QtCore.QSize(300, 250))
+        winLogin.resize(WIN_SIZE[0], WIN_SIZE[1])
+        winLogin.setMinimumSize(QtCore.QSize(WIN_SIZE[0], WIN_SIZE[1]))
+        winLogin.setMaximumSize(QtCore.QSize(WIN_SIZE[0], WIN_SIZE[1]))
 
         # Main window frame
         self.centralwidget = QtWidgets.QWidget(parent=winLogin)
         self.centralwidget.setObjectName("centralwidget")
 
         # Button widget
+        ## Variables for storing button width and positional parameters in order to keep the same position
+        ## for the button if a different width is desired
+        btnLogin_WIDTH     = 90
+        ## Calculate left position so the button stays btnLogin_RIGHT_DIST from the right edge
+        btnLogin_LEFT_DIST = WIN_SIZE[0] - btnLogin_WIDTH - WIN_RIGHT_DIST
+
         self.btnLogin = QtWidgets.QPushButton(parent=self.centralwidget)
-        self.btnLogin.setGeometry(QtCore.QRect(164, 160, 121, 31))
+        self.btnLogin.setGeometry(QtCore.QRect(btnLogin_LEFT_DIST, 160, btnLogin_WIDTH, 31))
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Fixed, QtWidgets.QSizePolicy.Policy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
