@@ -65,7 +65,7 @@ class Ui_winLogin(object):
     def setupUI(self, winLogin):
         # Main window
         WIN_SIZE       = [300, 250] # Window size parameters
-        WIN_RIGHT_DIST = 16         # Distrance from the right side of the window
+        WIN_RIGHT_DIST = 26         # Distrance from the right side of the window
                                     # that is desired for certain widgets to follow
 
         winLogin.setObjectName("winLogin")
@@ -127,7 +127,7 @@ class Ui_winLogin(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.lineUser.sizePolicy().hasHeightForWidth())
         self.lineUser.setSizePolicy(sizePolicy)
-        self.lineUser.setMinimumSize(QtCore.QSize(200, 0))
+        self.lineUser.setMinimumSize(QtCore.QSize(180, 0))
         self.lineUser.setEchoMode(QtWidgets.QLineEdit.EchoMode.Normal)
         self.lineUser.setDragEnabled(False)
         self.lineUser.setClearButtonEnabled(False)
@@ -160,7 +160,7 @@ class Ui_winLogin(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.linePass.sizePolicy().hasHeightForWidth())
         self.linePass.setSizePolicy(sizePolicy)
-        self.linePass.setMinimumSize(QtCore.QSize(200, 0))
+        self.linePass.setMinimumSize(QtCore.QSize(180, 0))
         self.linePass.setEchoMode(QtWidgets.QLineEdit.EchoMode.Password)
         self.linePass.setDragEnabled(False)
         self.linePass.setObjectName("linePass")
