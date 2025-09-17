@@ -1,0 +1,11 @@
+# Python version: 3.11.x
+# -------------------------
+# This setup avoids SIP deprecation warnings and supports Windows dark mode
+# https://www.python.org/downloads/release/python-3110/
+
+# Core dependencies
+pyqt6==6.9.1          	# Latest stable PyQt6 with windows theme matching support
+pyqt6-tools==6.4.2.3.3  # Qt Designer and tools compatible with PyQt6 6.4.2
+sip==6.12.0            	# Required for PyQt6 internals
+
+
