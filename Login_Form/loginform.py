@@ -1,12 +1,15 @@
 """
 ------------------------------------------------------------------
 A portion of this form was implemented by
-generating a python file from reading ui file 'loginform.ui'.
-Created by: PyQt6 UI code generator 6.4.2
+generating a python file by reading ui file 'loginform.ui'.
 
-Heavily edited to add additional logic and comments.
+Created with: PyQt6 UI code generator 6.4.2
+    (pyuic5 -x layout.ui -o layout.py)
+
+Edited to add additional logic and comments.
 ------------------------------------------------------------------
 """
+
 ##############################################################
 #
 #                loginform.py
@@ -15,14 +18,22 @@ Heavily edited to add additional logic and comments.
 #           Date: 9/17/2025
 #
 #        Summary: A simple login form with the purpose of
-#                 learning PyQt6 and PyQt6-tools
+#                 learning PyQt6 and PyQt6-tools.
 # 
 ##############################################################
-
 
 from PyQt6 import QtCore, QtGui, QtWidgets
 from PyQt6.QtWidgets import QMainWindow, QWidget, QVBoxLayout
 
+
+# ************************************************************************************
+# Window display and configuration functions
+# ************************************************************************************
+
+# ------------------------------------------------------------------------------------
+# Displays a window as the main window for the application.
+# Displays the winLogin window as the main window.
+# ------------------------------------------------------------------------------------
 class winMain(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -30,6 +41,9 @@ class winMain(QMainWindow):
         self.ui = Ui_winLogin()
         self.ui.setupUI(self)
 
+# ------------------------------------------------------------------------------------
+# Displays a window as a QWidget to act as a confirmation window.
+# ------------------------------------------------------------------------------------
 class winConfirmation(QWidget):
     def __init__(self, parent):
         super().__init__()
@@ -40,6 +54,13 @@ class winConfirmation(QWidget):
         self.setLayout(self.ui.layout)
 
 
+# ************************************************************************************
+# UI Setup Classes
+# ************************************************************************************
+
+# ------------------------------------------------------------------------------------
+# Configures the UI for a login window for use with any other application.
+# ------------------------------------------------------------------------------------
 class Ui_winLogin(object):
     def setupUI(self, winLogin):
         # Main window
@@ -155,7 +176,11 @@ class Ui_winLogin(object):
         winLogin.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(winLogin)
-
+        
+    # ------------------------------------------------------------------------------------
+    # Sets the text for the widgets and
+    # translates the window title, button, labels and entry fields used.
+    # ------------------------------------------------------------------------------------
     def retranslateUi(self, winLogin):
         # Support for multiple languages
         _translate = QtCore.QCoreApplication.translate
@@ -167,31 +192,54 @@ class Ui_winLogin(object):
         self.linePass.setPlaceholderText(_translate("winLogin", "password"))
         self.lblHeader.setText(_translate("winLogin", "Enter Login Information"))
 
+    # ------------------------------------------------------------------------------------
+    # Activates when the button is clicked, or when enter is pressed within the 
+    # password entry field.
+    #
+    # Saves the username and password information and then calls show_submission_window().
+    # ------------------------------------------------------------------------------------
     def submit_form(self):
         self.username = self.lineUser.text()
         self.password = self.linePass.text()
 
         self.show_submission_window()
 
+    # ------------------------------------------------------------------------------------
+    # Creates and shows the submission window 
+    # and keeps it from being garbage collected.
+    # ------------------------------------------------------------------------------------
     def show_submission_window(self):
         self.w = winConfirmation(self)
         self.w.show()
 
+# ------------------------------------------------------------------------------------
+# Configures the UI for a confirmation window, that shows a login was successful.
+# ------------------------------------------------------------------------------------
 class Ui_winConfirmation(object):
     def setupUI(self, winConfirmation, username, password):
         winConfirmation.setObjectName("winConfirmation")
-        winConfirmation.setWindowTitle("Login Confirmed!")
         winConfirmation.resize(400,100)
         winConfirmation.setMinimumSize(QtCore.QSize(400, 100))
         winConfirmation.setMaximumSize(QtCore.QSize(400, 100))
         
         # Submission window frame
         self.layout = QVBoxLayout()
-        self.label = QtWidgets.QLabel(f"Succesfully logged in!")
-        self.label.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        self.lblNotif = QtWidgets.QLabel()
+        self.lblNotif.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
 
-        self.layout.addWidget(self.label)
-
+        self.layout.addWidget(self.lblNotif)        
+        
+        self.retranslateUi(winConfirmation)
+        
+    # ------------------------------------------------------------------------------------
+    # Sets the text for the widgets and
+    # translates the window title and label used.
+    # ------------------------------------------------------------------------------------
+    def retranslateUi(self, winConfirmation):
+        # Support for multiple languages
+        _translate = QtCore.QCoreApplication.translate
+        winConfirmation.setWindowTitle(_translate("winConfirmation", "Login Confirmed!"))
+        self.lblNotif.setText(_translate("winConfirmation", "Successfully logged in!"))
 
 
 if __name__ == "__main__":
