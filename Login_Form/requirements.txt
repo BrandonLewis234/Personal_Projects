@@ -4,8 +4,18 @@
 # https://www.python.org/downloads/release/python-3110/
 
 # Core dependencies
-pyqt6==6.9.1          	# Latest stable PyQt6 with windows theme matching support
 pyqt6-tools==6.4.2.3.3  # Qt Designer and tools compatible with PyQt6 6.4.2
+pyqt6==6.9.1          	# Latest stable PyQt6 with windows theme matching support
 sip==6.12.0            	# Required for PyQt6 internals
+
+# To install the above:
+#
+# Run pip install -r requirements.txt
+# there will be an error saying there are conflicting dependencies. Ignore this
+# After running the above command, rerun
+# pip install pyqt6==6.9.1
+# It will say its incompatible. Ignore htis
+#
+# Weird work around for getting the correct configuration, but it does work.
 
 

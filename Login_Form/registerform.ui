@@ -1,36 +1,61 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>winLogin</class>
- <widget class="QMainWindow" name="winLogin">
+ <class>winRegister</class>
+ <widget class="QMainWindow" name="winRegister">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
     <width>300</width>
-    <height>350</height>
+    <height>450</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
     <width>300</width>
-    <height>350</height>
+    <height>450</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
     <width>300</width>
-    <height>350</height>
+    <height>450</height>
    </size>
   </property>
   <property name="windowTitle">
-   <string>Log-in Form</string>
+   <string>Registration Form</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QPushButton" name="btnLogin">
+   <widget class="QLabel" name="lblHeader">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>20</y>
+      <width>261</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>16</pointsize>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::NoFrame</enum>
+    </property>
+    <property name="text">
+     <string>Signup</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btnSignup">
     <property name="geometry">
      <rect>
       <x>39</x>
-      <y>240</y>
+      <y>340</y>
       <width>221</width>
       <height>41</height>
      </rect>
@@ -50,10 +75,7 @@
      <cursorShape>PointingHandCursor</cursorShape>
     </property>
     <property name="text">
-     <string>Login</string>
-    </property>
-    <property name="checkable">
-     <bool>false</bool>
+     <string>Signup</string>
     </property>
    </widget>
    <widget class="QFrame" name="vframeCred">
@@ -62,7 +84,7 @@
       <x>30</x>
       <y>70</y>
       <width>241</width>
-      <height>121</height>
+      <height>231</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -80,13 +102,69 @@
     <property name="midLineWidth">
      <number>0</number>
     </property>
-    <layout class="QVBoxLayout" name="verticalLayout">
+    <layout class="QVBoxLayout" name="verticalLayout_2">
      <property name="spacing">
       <number>5</number>
      </property>
      <property name="topMargin">
       <number>6</number>
      </property>
+     <item>
+      <widget class="QLabel" name="lblEmail">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="font">
+        <font>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>*Email:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="lineEmail">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>200</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">border-radius: 5px;
+height: 100px;</string>
+       </property>
+       <property name="echoMode">
+        <enum>QLineEdit::Normal</enum>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+       </property>
+       <property name="dragEnabled">
+        <bool>false</bool>
+       </property>
+       <property name="placeholderText">
+        <string>email</string>
+       </property>
+       <property name="clearButtonEnabled">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
      <item>
       <widget class="QLabel" name="lblUser">
        <property name="sizePolicy">
@@ -136,7 +214,7 @@ height: 100px;</string>
         <bool>false</bool>
        </property>
        <property name="placeholderText">
-        <string>username or email</string>
+        <string>username</string>
        </property>
        <property name="clearButtonEnabled">
         <bool>false</bool>
@@ -144,7 +222,7 @@ height: 100px;</string>
       </widget>
      </item>
      <item>
-      <widget class="QLabel" name="lblPass">
+      <widget class="QLabel" name="lblPassCreate">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -157,12 +235,117 @@ height: 100px;</string>
         </font>
        </property>
        <property name="text">
-        <string>*Password:</string>
+        <string>*Create password:</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="linePass">
+      <widget class="QWidget" name="hzwigPassCreate" native="true">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>16777215</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <layout class="QHBoxLayout" name="horizontalLayout_8">
+        <property name="spacing">
+         <number>5</number>
+        </property>
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="QLineEdit" name="linePassCreate">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>180</width>
+            <height>30</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>30</height>
+           </size>
+          </property>
+          <property name="layoutDirection">
+           <enum>Qt::LeftToRight</enum>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">border-radius: 5px;
+height: 50px;</string>
+          </property>
+          <property name="echoMode">
+           <enum>QLineEdit::Password</enum>
+          </property>
+          <property name="dragEnabled">
+           <bool>false</bool>
+          </property>
+          <property name="placeholderText">
+           <string>password</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QToolButton" name="tlbtnToggleVis">
+          <property name="minimumSize">
+           <size>
+            <width>30</width>
+            <height>30</height>
+           </size>
+          </property>
+          <property name="cursor">
+           <cursorShape>PointingHandCursor</cursorShape>
+          </property>
+          <property name="text">
+           <string>...</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="lblPassConf">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="font">
+        <font>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>*Confirm password:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="linePassConf">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -195,41 +378,16 @@ height: 50px;</string>
      </item>
     </layout>
    </widget>
-   <widget class="QLabel" name="lblHeader">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>20</y>
-      <width>261</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>16</pointsize>
-      <bold>true</bold>
-     </font>
-    </property>
-    <property name="frameShape">
-     <enum>QFrame::NoFrame</enum>
-    </property>
-    <property name="text">
-     <string>Login</string>
-    </property>
-    <property name="alignment">
-     <set>Qt::AlignCenter</set>
-    </property>
-   </widget>
    <widget class="QWidget" name="hzwigRedirect" native="true">
     <property name="geometry">
      <rect>
       <x>40</x>
-      <y>280</y>
-      <width>211</width>
+      <y>380</y>
+      <width>221</width>
       <height>31</height>
      </rect>
     </property>
-    <layout class="QHBoxLayout" name="horizontalLayout">
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
      <item>
       <widget class="QLabel" name="lblAskAcc">
        <property name="minimumSize">
@@ -256,7 +414,7 @@ height: 50px;</string>
         <string notr="true"/>
        </property>
        <property name="text">
-        <string>Don't have an account?</string>
+        <string>Already have an account?</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -267,7 +425,7 @@ height: 50px;</string>
       </widget>
      </item>
      <item>
-      <widget class="QLabel" name="lblSignup">
+      <widget class="QLabel" name="lblLogin">
        <property name="enabled">
         <bool>true</bool>
        </property>
@@ -295,7 +453,7 @@ height: 50px;</string>
         <string notr="true">color: rgb(0, 170, 255);</string>
        </property>
        <property name="text">
-        <string>Sign Up</string>
+        <string>Log in</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
@@ -314,7 +472,7 @@ height: 50px;</string>
     <property name="geometry">
      <rect>
       <x>30</x>
-      <y>195</y>
+      <y>305</y>
       <width>241</width>
       <height>31</height>
      </rect>
