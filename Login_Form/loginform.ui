@@ -101,10 +101,13 @@
         </font>
        </property>
        <property name="text">
-        <string>*Username:</string>
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Username:&lt;span style=&quot; color:red;&quot;&gt;*&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+       </property>
+       <property name="buddy">
+        <cstring>lineUser</cstring>
        </property>
       </widget>
      </item>
@@ -123,8 +126,9 @@
         </size>
        </property>
        <property name="styleSheet">
-        <string notr="true">border-radius: 5px;
-height: 100px;</string>
+        <string notr="true">background-color: rgb(223, 223, 223);
+border-radius: 5px;
+height: 50px;</string>
        </property>
        <property name="echoMode">
         <enum>QLineEdit::Normal</enum>
@@ -157,7 +161,10 @@ height: 100px;</string>
         </font>
        </property>
        <property name="text">
-        <string>*Password:</string>
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Username:&lt;span style=&quot; color:red;&quot;&gt;*&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+       <property name="buddy">
+        <cstring>linePass</cstring>
        </property>
       </widget>
      </item>
@@ -179,7 +186,8 @@ height: 100px;</string>
         <enum>Qt::LeftToRight</enum>
        </property>
        <property name="styleSheet">
-        <string notr="true">border-radius: 5px;
+        <string notr="true">background-color: rgb(223, 223, 223);
+border-radius: 5px;
 height: 50px;</string>
        </property>
        <property name="echoMode">
@@ -313,14 +321,14 @@ height: 50px;</string>
     </property>
     <property name="geometry">
      <rect>
-      <x>30</x>
+      <x>40</x>
       <y>195</y>
       <width>241</width>
       <height>31</height>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">color: rgb(255, 0, 0);</string>
+     <string notr="true">color: red;</string>
     </property>
     <property name="text">
      <string>Error messages go here</string>
