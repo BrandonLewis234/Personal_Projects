@@ -35,7 +35,7 @@ from PyQt6.QtGui import QPalette
 from overrides import clickableLabel, set_position
 
 # ---------------------------------------------------------------
-# Displays the winLogin window as the main window.
+# Displays the winRegister window as the main window.
 # ---------------------------------------------------------------
 class winRegister(QMainWindow):
     def __init__(self, app, position=None):
@@ -59,7 +59,7 @@ class winRegister(QMainWindow):
 
 
 # ------------------------------------------------------------------------------------
-# Configures the UI for a login window for use with any other application.
+# Configures the UI for a signup window for use with any other application.
 # ------------------------------------------------------------------------------------
 class Ui_winRegister(object):
     def setupUi(self, winRegister, styles, app):
