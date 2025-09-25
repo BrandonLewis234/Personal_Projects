@@ -28,12 +28,17 @@
 # -------------------------------------------------------------
 
 from PyQt6 import QtCore, QtGui
-from PyQt6.QtWidgets import QApplication, QMainWindow, QWidget, QSizePolicy, QLabel
-from PyQt6.QtWidgets import QFrame, QPushButton, QVBoxLayout, QHBoxLayout, QLineEdit, QMenuBar, QStatusBar
+from PyQt6.QtWidgets import QApplication, QMainWindow, QWidget, QLabel
+from PyQt6.QtWidgets import QFrame, QPushButton, QVBoxLayout, QHBoxLayout, QLineEdit
 from PyQt6.QtGui import QPalette
 
+from overrides import clickableLabel, set_position
+
+# ---------------------------------------------------------------
+# Displays the winLogin window as the main window.
+# ---------------------------------------------------------------
 class winRegister(QMainWindow):
-    def __init__(self, app):
+    def __init__(self, app, position=None):
         super().__init__()
         self.ui = Ui_winRegister()
         
@@ -47,15 +52,20 @@ class winRegister(QMainWindow):
              "lineEdit": f"background-color: {lighterColor.name()};border-radius: 5px;height: 30px;" 
         }
 
-        self.ui.setupUi(self, styles)
-  
+        self.ui.setupUi(self, styles, app)
 
+        if position:
+            set_position(self, position)
+
+
+# ------------------------------------------------------------------------------------
+# Configures the UI for a login window for use with any other application.
+# ------------------------------------------------------------------------------------
 class Ui_winRegister(object):
-    def setupUi(self, winRegister, styles):
+    def setupUi(self, winRegister, styles, app):
         # Configure main window properties
         winRegister.setObjectName("winRegister")
-        winRegister.setFixedSize(QtCore.QSize(300, 450))
-        winRegister.setStyleSheet("")
+        winRegister.setFixedSize(300, 450)
 
         # ---------------------------------------------------------------
         # Main layout widgets
@@ -63,11 +73,12 @@ class Ui_winRegister(object):
         
         # Central frame for widgets
         self.centralwidget = QWidget(parent=winRegister)
-
+        winRegister.setCentralWidget(self.centralwidget)
+        
         # Frame for line edit fields
         self.vframeCred = QFrame(parent=self.centralwidget)
         if True:
-                # Positioning
+                # Sizing
                 self.vframeCred.setGeometry(QtCore.QRect(30, 70, 241, 231))
                 # Styling
                 self.vframeCred.setFrameShape(QFrame.Shape.StyledPanel)
@@ -83,22 +94,20 @@ class Ui_winRegister(object):
         # Header label
         self.lblHeader = QLabel(parent=self.centralwidget)
         if True:
-                # Positioning
-                self.lblHeader.setGeometry(QtCore.QRect(20, 20, 261, 41))
                 # Font
-                font = QtGui.QFont(); font.setPointSize(16); font.setBold(True)
-                self.lblHeader.setFont(font)
+                font = QtGui.QFont(); font.setPointSize(16); font.setBold(True); self.lblHeader.setFont(font)
+                # Sizing
+                self.lblHeader.setGeometry(QtCore.QRect(20, 20, 261, 41))
                 # Alignment
                 self.lblHeader.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         
         # Signup button
         self.btnSignup = QPushButton(parent=self.centralwidget)
         if True:
-                # Positioning
-                self.btnSignup.setGeometry(QtCore.QRect(39, 340, 221, 41))
                 # Font
-                font = QtGui.QFont(); font.setPointSize(10)
-                self.btnSignup.setFont(font)
+                font = QtGui.QFont(); font.setPointSize(10); self.btnSignup.setFont(font)
+                # Sizing
+                self.btnSignup.setGeometry(QtCore.QRect(39, 340, 221, 41))
                 # Cursor change
                 self.btnSignup.setCursor(QtGui.QCursor(QtCore.Qt.CursorShape.PointingHandCursor))
 
@@ -184,6 +193,76 @@ class Ui_winRegister(object):
                 # Cursor change
                 self.pbtnToggleVis.setCursor(QtGui.QCursor(QtCore.Qt.CursorShape.PointingHandCursor))
 
+
+        self.lblPassConf = QLabel(parent=self.vframeCred)
+        if True:
+                # Font
+                font = QtGui.QFont(); font.setBold(True); self.lblPassConf.setFont(font)
+
+        self.linePassConf = QLineEdit(parent=self.vframeCred)
+        if True:
+                # Sizing
+                self.linePassConf.setMinimumSize(QtCore.QSize(200, 0))
+                # Styling
+                self.linePassConf.setStyleSheet(styles["lineEdit"])
+                # Hide input
+                self.linePassConf.setEchoMode(QLineEdit.EchoMode.Password)
+
+        # ------------------------------        
+        # Redirect widgets
+        # ------------------------------     
+
+        # Main frame
+        self.hzwigRedirect = QWidget(parent=self.centralwidget)
+        if True:
+                # Sizing
+                self.hzwigRedirect.setGeometry(QtCore.QRect(50, 380, 225, 31))
+
+        # Main layout
+        self.hboxRedirect = QHBoxLayout(self.hzwigRedirect)
+        if True:
+                self.hboxRedirect.setContentsMargins(0, 0, 0, 0)
+
+        self.lblAskAcc = QLabel(parent=self.hzwigRedirect)
+        if True:
+                # Font
+                font = QtGui.QFont(); font.setPointSize(8); self.lblAskAcc.setFont(font)
+                # Sizing
+                self.lblAskAcc.setMinimumSize(QtCore.QSize(140, 0))
+                # Alignment
+                self.lblAskAcc.setAlignment(QtCore.Qt.AlignmentFlag.AlignRight|QtCore.Qt.AlignmentFlag.AlignVCenter)
+                # Cursor change
+                self.lblAskAcc.setCursor(QtGui.QCursor(QtCore.Qt.CursorShape.ArrowCursor))
+
+        self.lblLogin = clickableLabel(parent=self.hzwigRedirect, root=winRegister, app=app)
+        if True:
+                # Font
+                font = QtGui.QFont(); font.setUnderline(True); self.lblLogin.setFont(font)
+                # Sizing
+                self.lblLogin.setMinimumSize(QtCore.QSize(50, 0))
+                # Alignment
+                self.lblLogin.setAlignment(QtCore.Qt.AlignmentFlag.AlignLeft|QtCore.Qt.AlignmentFlag.AlignVCenter)
+                # Styling
+                self.lblLogin.setStyleSheet("color: rgb(0, 170, 255); padding-bottom: 2px;")
+                # Cursor Change
+                self.lblLogin.setCursor(QtGui.QCursor(QtCore.Qt.CursorShape.PointingHandCursor))
+
+        # ------------------------------        
+        # Error label
+        # ------------------------------    
+
+        self.lblErrors = QLabel(parent=self.centralwidget)
+        if True:
+                # Font
+                font = QtGui.QFont(); font.setBold(False); self.lblErrors.setFont(font)
+                # Sizing
+                self.lblErrors.setGeometry(QtCore.QRect(40, 305, 241, 31))
+                # Alignment
+                self.lblErrors.setAlignment(QtCore.Qt.AlignmentFlag.AlignLeft|QtCore.Qt.AlignmentFlag.AlignTop)
+                # Styling
+                self.lblErrors.setStyleSheet("color: red;")
+
+                
         # ------------------------------
         # Add widgets to layout
         # ------------------------------
@@ -193,118 +272,60 @@ class Ui_winRegister(object):
         self.vboxCred.          addWidget(self.lblUser)
         self.vboxCred.          addWidget(self.lineUser)
         self.vboxCred.          addWidget(self.lblPassCreate)
-        # Add passion creation elements to horizontal layout
+        self.vboxCred.          addWidget(self.hzwigPassCreate)
+        self.vboxCred.          addWidget(self.lblPassConf)
+        self.vboxCred.          addWidget(self.linePassConf)
+        # Add password creation elements to horizontal layout
         self.hboxPassCreate.    addWidget(self.linePassCreate)
         self.hboxPassCreate.    addWidget(self.pbtnToggleVis)
+        # Add redirect elements to horizontal layout
+        self.hboxRedirect.      addWidget(self.lblAskAcc)
+        self.hboxRedirect.      addWidget(self.lblLogin)
 
-        self.vboxCred.addWidget(self.hzwigPassCreate)
-        self.lblPassConf = QLabel(parent=self.vframeCred)
-        sizePolicy = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.lblPassConf.sizePolicy().hasHeightForWidth())
-        self.lblPassConf.setSizePolicy(sizePolicy)
-        font = QtGui.QFont()
-        font.setBold(True)
-        self.lblPassConf.setFont(font)
-        self.lblPassConf.setObjectName("lblPassConf")
-        self.vboxCred.addWidget(self.lblPassConf)
-        self.linePassConf = QLineEdit(parent=self.vframeCred)
-        self.linePassConf.setEnabled(True)
-        sizePolicy = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.linePassConf.sizePolicy().hasHeightForWidth())
-        self.linePassConf.setSizePolicy(sizePolicy)
-        self.linePassConf.setMinimumSize(QtCore.QSize(200, 0))
-        self.linePassConf.setLayoutDirection(QtCore.Qt.LayoutDirection.LeftToRight)
-        self.linePassConf.setEchoMode(QLineEdit.EchoMode.Password)
-        self.linePassConf.setDragEnabled(False)
-        self.linePassConf.setObjectName("linePassConf")
-        self.linePassConf.setStyleSheet(styles["lineEdit"])
-        self.vboxCred.addWidget(self.linePassConf)
-        self.hzwigRedirect = QWidget(parent=self.centralwidget)
-        self.hzwigRedirect.setGeometry(QtCore.QRect(40, 380, 221, 31))
-        self.hzwigRedirect.setObjectName("hzwigRedirect")
-        self.horizontalLayout_2 = QHBoxLayout(self.hzwigRedirect)
-        self.horizontalLayout_2.setContentsMargins(0, 0, 0, 0)
-        self.horizontalLayout_2.setObjectName("horizontalLayout_2")
-        self.lblAskAcc = QLabel(parent=self.hzwigRedirect)
-        self.lblAskAcc.setMinimumSize(QtCore.QSize(135, 0))
-        self.lblAskAcc.setMaximumSize(QtCore.QSize(135, 16777215))
-        font = QtGui.QFont()
-        font.setPointSize(8)
-        self.lblAskAcc.setFont(font)
-        self.lblAskAcc.setCursor(QtGui.QCursor(QtCore.Qt.CursorShape.ArrowCursor))
-        self.lblAskAcc.setStyleSheet("")
-        self.lblAskAcc.setAlignment(QtCore.Qt.AlignmentFlag.AlignRight|QtCore.Qt.AlignmentFlag.AlignTrailing|QtCore.Qt.AlignmentFlag.AlignVCenter)
-        self.lblAskAcc.setIndent(-1)
-        self.lblAskAcc.setObjectName("lblAskAcc")
-        self.horizontalLayout_2.addWidget(self.lblAskAcc)
-        self.lblLogin = QLabel(parent=self.hzwigRedirect)
-        self.lblLogin.setEnabled(True)
-        self.lblLogin.setMinimumSize(QtCore.QSize(50, 0))
-        self.lblLogin.setMaximumSize(QtCore.QSize(50, 16777215))
-        font = QtGui.QFont()
-        font.setUnderline(True)
-        self.lblLogin.setFont(font)
-        self.lblLogin.setCursor(QtGui.QCursor(QtCore.Qt.CursorShape.PointingHandCursor))
-        self.lblLogin.setStyleSheet("color: rgb(0, 170, 255);")
-        self.lblLogin.setAlignment(QtCore.Qt.AlignmentFlag.AlignLeading|QtCore.Qt.AlignmentFlag.AlignLeft|QtCore.Qt.AlignmentFlag.AlignVCenter)
-        self.lblLogin.setWordWrap(False)
-        self.lblLogin.setObjectName("lblLogin")
-        self.horizontalLayout_2.addWidget(self.lblLogin)
-        self.lblErrors = QLabel(parent=self.centralwidget)
-        self.lblErrors.setEnabled(True)
-        self.lblErrors.setGeometry(QtCore.QRect(40, 305, 241, 31))
-        font = QtGui.QFont()
-        font.setBold(False)
-        self.lblErrors.setFont(font)
-        self.lblErrors.setStyleSheet("color: red;")
-        self.lblErrors.setAlignment(QtCore.Qt.AlignmentFlag.AlignLeading|QtCore.Qt.AlignmentFlag.AlignLeft|QtCore.Qt.AlignmentFlag.AlignTop)
-        self.lblErrors.setObjectName("lblErrors")
-        winRegister.setCentralWidget(self.centralwidget)
-        self.menubar = QMenuBar(parent=winRegister)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 300, 22))
-        self.menubar.setObjectName("menubar")
-        winRegister.setMenuBar(self.menubar)
-        self.statusbar = QStatusBar(parent=winRegister)
-        self.statusbar.setObjectName("statusbar")
-        winRegister.setStatusBar(self.statusbar)
-        self.lblEmail.setBuddy(self.lineEmail)
-        self.lblUser.setBuddy(self.lineUser)
-        self.lblPassCreate.setBuddy(self.linePassCreate)
-        self.lblPassConf.setBuddy(self.linePassConf)
-
+        # ---------------------------------------------------------------
+        # Set translation
+        # ---------------------------------------------------------------
         self.retranslateUi(winRegister)
-        QtCore.QMetaObject.connectSlotsByName(winRegister)
 
+
+    # ---------------------------------------------------------------
+    # Add titles for widgets and ensure they 
+    # translate to the user's set langauge
+    # ---------------------------------------------------------------
     def retranslateUi(self, winRegister):
         _translate = QtCore.QCoreApplication.translate
-        winRegister.setWindowTitle(_translate("winRegister", "Registration Form"))
+        winRegister.setWindowTitle(_translate("winRegister", "Signup Form"))
+
         self.lblHeader.setText(_translate("winRegister", "Signup"))
         self.btnSignup.setText(_translate("winRegister", "Signup"))
+
+        # Add a red * character at the end of required fields
         self.lblEmail.setText(_translate("winRegister", "<html><head/><body><p>Email:<span style=\" color:red;\">*</span></p></body></html>"))
         self.lineEmail.setPlaceholderText(_translate("winRegister", "email"))
         self.lblUser.setText(_translate("winRegister", "<html><head/><body><p>Username:<span style=\" color:red;\">*</span></p></body></html>"))
         self.lineUser.setPlaceholderText(_translate("winRegister", "username"))
+
         self.lblPassCreate.setText(_translate("winRegister", "<html><head/><body><p>Create password:<span style=\" color:red;\">*</span></p></body></html>"))
         self.linePassCreate.setPlaceholderText(_translate("winRegister", "password"))
         self.pbtnToggleVis.setToolTip(_translate("winRegister", "show/hide password"))
         self.pbtnToggleVis.setText(_translate("winRegister", "..."))
         self.lblPassConf.setText(_translate("winRegister", "<html><head/><body><p>Confirm password:<span style=\" color:red;\">*</span></p></body></html>"))
         self.linePassConf.setPlaceholderText(_translate("winRegister", "password"))
+
         self.lblAskAcc.setText(_translate("winRegister", "Already have an account?"))
         self.lblLogin.setText(_translate("winRegister", "Log in"))
+
         self.lblErrors.setText(_translate("winRegister", "Error messages go here"))
 
 
+
+
 if __name__ == "__main__":
-        import sys
-        app = QApplication(sys.argv)
-        app.setStyle("") # windows, windowsvista, fusion, or custom styles
+    import sys
+    app = QApplication(sys.argv)
+    app.setStyle("") # windows, windowsvista, fusion, or custom styles
 
-        window = winRegister(app)
-        window.show()
+    window = winRegister(app)
+    window.show()
 
-        sys.exit(app.exec())
+    sys.exit(app.exec())
