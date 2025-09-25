@@ -1,21 +1,28 @@
+#-------------------------------------------------------------------------------------
 # Python version: 3.11.x
 # -------------------------
-# This setup avoids SIP deprecation warnings and supports Windows dark mode
+# This setup avoids SIP deprecation warnings and supports utilizing Windows themes.
 # https://www.python.org/downloads/release/python-3110/
+#-------------------------------------------------------------------------------------
 
+#-------------------------------------------------------------------------------------
 # Core dependencies
 pyqt6-tools==6.4.2.3.3  # Qt Designer and tools compatible with PyQt6 6.4.2
 pyqt6==6.9.1          	# Latest stable PyQt6 with windows theme matching support
 sip==6.12.0            	# Required for PyQt6 internals
+#-------------------------------------------------------------------------------------
 
+#-------------------------------------------------------------------------------------
 # To install the above:
-#
+#-------------------------------------------------------------------------------------
 # Run pip install -r requirements.txt
-# there will be an error saying there are conflicting dependencies. Ignore this
-# After running the above command, rerun
+# there will be an error saying there are conflicting dependencies. Ignore this.
+# After running the above command, run the below:
 # pip install pyqt6==6.9.1
-# It will say its incompatible. Ignore htis
+# It will say its incompatible. Ignore this aswell.
 #
-# Weird work around for getting the correct configuration, but it does work.
+# This is a very strange work around for 
+# getting the correct configuration, but it does work.
+#-------------------------------------------------------------------------------------
 
 
