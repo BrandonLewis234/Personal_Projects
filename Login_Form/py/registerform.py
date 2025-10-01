@@ -9,8 +9,8 @@
 #        Summary: A simple signup form with the purpose of
 #                 learning PyQt6 and PyQt6-tools.
 # 
-#          NOTE: Any "if True:" blocks are just for formatting
-#                and for better visualization.
+#           NOTE: Any "if True:" blocks are just for formatting
+#                 and for better visualization.
 #
 #
 #
@@ -130,12 +130,8 @@ class Ui_winRegister(object):
         if True:
                 # Sizing
                 self.lineEmail.setMinimumSize(sizeCred)
-                # Alignment
-                self.lineEmail.setAlignment(alignCred)
                 # Styling
                 self.lineEmail.setStyleSheet(styles["lineEdit"])
-                # Hide input
-                self.lineEmail.setEchoMode(QLineEdit.EchoMode.Normal)
 
         # ------------------------------
         # Username widgets
@@ -149,8 +145,6 @@ class Ui_winRegister(object):
         if True:
                 # Sizing
                 self.lineUser.setMinimumSize(sizeCred)
-                # Alignment
-                self.lineUser.setAlignment(alignCred)
                 # Styling
                 self.lineUser.setStyleSheet(styles["lineEdit"])
                 # Hide input
