@@ -76,16 +76,13 @@ class Ui_winLogin(object):
             # Formatting
             self.mainLayout.setContentsMargins(20, 20, 20, 20)
 
-        self.headerLayout = QVBoxLayout()
-        if True:
-            # Formatting
-            self.headerLayout.setContentsMargins(0, 10, 0, 10)
-
         # Header label        
         self.lblHeader = QLabel(parent=self.centralwidget)
         if True:
             # Font
             font = QtGui.QFont(); font.setPointSize(16); font.setBold(True); self.lblHeader.setFont(font)
+            # Formatting
+            self.lblHeader.setContentsMargins(0, 10, 0, 10)
             # Alignment
             self.lblHeader.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
 
@@ -101,8 +98,7 @@ class Ui_winLogin(object):
             self.vframeCred.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
 
         # Add widgets to the main layout
-        self.headerLayout.addWidget(self.lblHeader)
-        self.mainLayout.addLayout(self.headerLayout)
+        self.mainLayout.addWidget(self.lblHeader)
         self.mainLayout.addWidget(self.vframeCred)
 
         # Vertical layout for line edit fields
@@ -140,9 +136,6 @@ class Ui_winLogin(object):
             # Hide input
             self.linePass.setEchoMode(QLineEdit.EchoMode.Password)
 
-        # ------------------------------
-        # Add widgets to layout
-        # ------------------------------
         # Add elements to vertical layout
         self.verticalLayout.addWidget(self.lblUser)
         self.verticalLayout.addWidget(self.lineUser)
@@ -170,9 +163,6 @@ class Ui_winLogin(object):
             # Expansion Policy
             self.btnLogin.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
 
-        # Add to layout
-        self.hLayoutBtn.addWidget(self.btnLogin)
-        self.mainLayout.addLayout(self.hLayoutBtn)
 
         # ------------------------------        
         # Redirect widgets
@@ -200,6 +190,10 @@ class Ui_winLogin(object):
             # Cursor Change
             self.lblSignup.setCursor(QtGui.QCursor(QtCore.Qt.CursorShape.PointingHandCursor))
 
+        # ------------------------------        
+        # Error label
+        # ------------------------------     
+
         self.lblErrors = QLabel(parent=self.centralwidget)
         if True:
             # Styling
@@ -208,28 +202,40 @@ class Ui_winLogin(object):
             self.lblErrors.setVisible(False)
 
         # Add to layout
+        self.hLayoutBtn.addWidget(self.btnLogin)
+        self.mainLayout.addLayout(self.hLayoutBtn)
+
         self.mainLayout.addWidget(self.lblErrors, alignment=QtCore.Qt.AlignmentFlag.AlignHCenter)
         self.mainLayout.addWidget(self.hzwigRedirect, alignment=QtCore.Qt.AlignmentFlag.AlignHCenter)
         self.mainLayout.addLayout(self.hboxRedirect)
         self.hboxRedirect.addWidget(self.lblAskAcc)
         self.hboxRedirect.addWidget(self.lblSignup) 
 
-
-
-
+        # ---------------------------------------------------------------
+        # Set translation
+        # ---------------------------------------------------------------
         self.retranslateUi(winLogin)
 
+    # ---------------------------------------------------------------
+    # Add titles for widgets and ensure they 
+    # translate to the user's set langauge
+    # ---------------------------------------------------------------
     def retranslateUi(self, winLogin):
         _translate = QtCore.QCoreApplication.translate
         winLogin.setWindowTitle(_translate("winLogin", "Login Form"))
+
+        self.lblHeader.setText(_translate("winLogin", "Login"))
         self.btnLogin.setText(_translate("winLogin", "Login"))
+
+        # Add a red * character at the end of required fields
         self.lblUser.setText(_translate("winLogin", "<html><head/><body><p>Username:<span style=\" color:red;\">*</span></p></body></html>"))
         self.lineUser.setPlaceholderText(_translate("winLogin", "username or email"))
         self.lblPass.setText(_translate("winLogin", "<html><head/><body><p>Password:<span style=\" color:red;\">*</span></p></body></html>"))
         self.linePass.setPlaceholderText(_translate("winLogin", "password"))
-        self.lblHeader.setText(_translate("winLogin", "Login"))
+
         self.lblAskAcc.setText(_translate("winLogin", "Don\'t have an account?"))
         self.lblSignup.setText(_translate("winLogin", "Sign Up"))
+        
         self.lblErrors.setText(_translate("winLogin", "Error messages go here"))
 
 
