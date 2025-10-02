@@ -155,10 +155,10 @@ class Ui_winRegister(object):
         # ------------------------------        
 
         ## Horizontal widget for password creation and show/hide button
-        self.hzwigPassCreate = QWidget(parent=self.vframeCred)
+        self.frmPassCreate = QWidget(parent=self.vframeCred)
         
         ## Horizontal layout for password creation and show/hide button
-        self.hboxPassCreate = QHBoxLayout(self.hzwigPassCreate)
+        self.hboxPassCreate = QHBoxLayout(self.frmPassCreate)
         if True:
                 self.hboxPassCreate.setContentsMargins(0, 0, 0, 0)
                 self.hboxPassCreate.setSpacing(5)
@@ -168,7 +168,7 @@ class Ui_winRegister(object):
         if True:
                 font = QtGui.QFont(); font.setBold(True); self.lblPassCreate.setFont(font)
 
-        self.linePassCreate = QLineEdit(parent=self.hzwigPassCreate)
+        self.linePassCreate = QLineEdit(parent=self.frmPassCreate)
         if True:
                 # Sizing
                 self.linePassCreate.setMinimumSize(QtCore.QSize(180, 30))
@@ -180,7 +180,7 @@ class Ui_winRegister(object):
                 self.linePassCreate.setEchoMode(QLineEdit.EchoMode.Password)
 
         ## Button for toggling visibility for passCreate and disabling passConf
-        self.pbtnToggleVis = QPushButton(parent=self.hzwigPassCreate)
+        self.pbtnToggleVis = QPushButton(parent=self.frmPassCreate)
         if True:        
                 # Sizing
                 self.pbtnToggleVis.setMinimumSize(QtCore.QSize(30, 30))
@@ -207,17 +207,17 @@ class Ui_winRegister(object):
         # ------------------------------     
 
         # Main frame
-        self.hzwigRedirect = QWidget(parent=self.centralwidget)
+        self.frmRedirect = QWidget(parent=self.centralwidget)
         if True:
                 # Sizing
-                self.hzwigRedirect.setGeometry(QtCore.QRect(50, 380, 225, 31))
+                self.frmRedirect.setGeometry(QtCore.QRect(50, 380, 225, 31))
 
         # Main layout
-        self.hboxRedirect = QHBoxLayout(self.hzwigRedirect)
+        self.hboxRedirect = QHBoxLayout(self.frmRedirect)
         if True:
                 self.hboxRedirect.setContentsMargins(0, 0, 0, 0)
 
-        self.lblAskAcc = QLabel(parent=self.hzwigRedirect)
+        self.lblAskAcc = QLabel(parent=self.frmRedirect)
         if True:
                 # Font
                 font = QtGui.QFont(); font.setPointSize(8); self.lblAskAcc.setFont(font)
@@ -228,7 +228,7 @@ class Ui_winRegister(object):
                 # Cursor change
                 self.lblAskAcc.setCursor(QtGui.QCursor(QtCore.Qt.CursorShape.ArrowCursor))
 
-        self.lblLogin = clickableLabel(parent=self.hzwigRedirect, root=winRegister, app=app)
+        self.lblLogin = clickableLabel(parent=self.frmRedirect, root=winRegister, app=app)
         if True:
                 # Font
                 font = QtGui.QFont(); font.setUnderline(True); self.lblLogin.setFont(font)
@@ -268,7 +268,7 @@ class Ui_winRegister(object):
         self.vboxCred.          addWidget(self.lblUser)
         self.vboxCred.          addWidget(self.lineUser)
         self.vboxCred.          addWidget(self.lblPassCreate)
-        self.vboxCred.          addWidget(self.hzwigPassCreate)
+        self.vboxCred.          addWidget(self.frmPassCreate)
         self.vboxCred.          addWidget(self.lblPassConf)
         self.vboxCred.          addWidget(self.linePassConf)
         # Add password creation elements to horizontal layout

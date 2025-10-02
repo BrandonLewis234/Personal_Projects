@@ -8,9 +8,8 @@ from PyQt6.QtGui import QCursor
 # instead of signing in
 # ---------------------------------------------------------------
 class clickableLabel(QLabel):
-        def __init__(self, parent, root, app, type=0):
-                QLabel.__init__(self, parent)
-                self.parent = parent
+        def __init__(self, root, app, type=0):
+                QLabel.__init__(self)
                 self.root   = root
                 self.app    = app
                 self.type   = type

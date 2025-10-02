@@ -59,8 +59,8 @@ class winLogin(QMainWindow):
 class Ui_winLogin(object):
     def setupUi(self, winLogin, styles, app):
         # Configure main window properties
-        winLogin.setMinimumSize(300, 350)
-        winLogin.setMaximumSize(450,525) # 1.5x min size
+        winLogin.setMinimumSize(300, 370)
+        winLogin.setMaximumSize(450,500)
 
         # ---------------------------------------------------------------
         # Main layout widgets
@@ -71,10 +71,10 @@ class Ui_winLogin(object):
         winLogin.setCentralWidget(self.centralwidget)
 
         # Main vertical layout
-        self.mainLayout = QVBoxLayout(self.centralwidget)
+        self.layoutMain = QVBoxLayout(self.centralwidget)
         if True:
             # Formatting
-            self.mainLayout.setContentsMargins(20, 20, 20, 20)
+            self.layoutMain.setContentsMargins(20, 20, 20, 20)
 
         # Header label        
         self.lblHeader = QLabel(parent=self.centralwidget)
@@ -83,6 +83,7 @@ class Ui_winLogin(object):
             font = QtGui.QFont(); font.setPointSize(16); font.setBold(True); self.lblHeader.setFont(font)
             # Formatting
             self.lblHeader.setContentsMargins(0, 10, 0, 10)
+            self.lblHeader.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
             # Alignment
             self.lblHeader.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
 
@@ -93,16 +94,17 @@ class Ui_winLogin(object):
             self.vframeCred.setFrameShape(QFrame.Shape.StyledPanel)
             self.vframeCred.setFrameShadow(QFrame.Shadow.Plain)
             # Sizing
-            self.vframeCred.setMaximumSize(600,200)
+            self.vframeCred.setMinimumSize(100, 30)
+            self.vframeCred.setMaximumSize(450,180)
             # Expansion Policy
-            self.vframeCred.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
+            self.vframeCred.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.MinimumExpanding)
 
         # Add widgets to the main layout
-        self.mainLayout.addWidget(self.lblHeader)
-        self.mainLayout.addWidget(self.vframeCred)
+        self.layoutMain.addWidget(self.lblHeader)
+        self.layoutMain.addWidget(self.vframeCred)
 
-        # Vertical layout for line edit fields
-        self.verticalLayout = QVBoxLayout(self.vframeCred)
+        # Vertical layout for credential fields
+        self.layoutCred = QVBoxLayout(self.vframeCred)
 
         # ---------------------------------------------------------------
         # Credential fields
@@ -136,20 +138,14 @@ class Ui_winLogin(object):
             # Hide input
             self.linePass.setEchoMode(QLineEdit.EchoMode.Password)
 
-        # Add elements to vertical layout
-        self.verticalLayout.addWidget(self.lblUser)
-        self.verticalLayout.addWidget(self.lineUser)
-        self.verticalLayout.addWidget(self.lblPass)
-        self.verticalLayout.addWidget(self.linePass)
-
         # Spacing between credential frame and login button
-        self.mainLayout.addSpacing(20)
+        self.layoutMain.addSpacing(20)
 
         # Horizontal layout for login button
-        self.hLayoutBtn = QHBoxLayout()
+        self.layoutLogin = QHBoxLayout()
         if True:
             # Padding to make button ~16px narrower than full width
-            self.hLayoutBtn.setContentsMargins(8, 0, 8, 0)
+            self.layoutLogin.setContentsMargins(8, 0, 8, 0)
 
         # Login button
         self.btnLogin = QPushButton(parent=self.centralwidget)
@@ -158,30 +154,37 @@ class Ui_winLogin(object):
             font = QtGui.QFont(); font.setPointSize(10); self.btnLogin.setFont(font)
             # Formatting
             self.btnLogin.setMinimumHeight(40)
+            self.btnLogin.setMaximumHeight(60)
             # Cursor change
             self.btnLogin.setCursor(QtGui.QCursor(QtCore.Qt.CursorShape.PointingHandCursor))
             # Expansion Policy
-            self.btnLogin.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
+            self.btnLogin.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Maximum)
 
+
+        # Add elements to vertical layout
+        self.layoutCred.addWidget(self.lblUser)
+        self.layoutCred.addWidget(self.lineUser)
+        self.layoutCred.addWidget(self.lblPass)
+        self.layoutCred.addWidget(self.linePass)
 
         # ------------------------------        
         # Redirect widgets
         # ------------------------------     
         
         # Main Frame
-        self.hzwigRedirect = QWidget(parent=self.centralwidget)
+        self.frmRedirect = QFrame(parent=self.lblHeader)
 
         # Main Layout
-        self.hboxRedirect = QHBoxLayout(self.hzwigRedirect)
+        self.hboxRedirect = QHBoxLayout(self.frmRedirect)
 
-        self.lblAskAcc = QLabel(parent=self.hzwigRedirect)
+        self.lblAskAcc = QLabel()
         if True:
             # Font
             font = QtGui.QFont(); font.setPointSize(8); self.lblAskAcc.setFont(font)
             # Cursor change
             self.lblAskAcc.setCursor(QtGui.QCursor(QtCore.Qt.CursorShape.ArrowCursor))
 
-        self.lblSignup = clickableLabel(parent=self.hzwigRedirect, root=winLogin, app=app, type=1)
+        self.lblSignup = clickableLabel(root=winLogin, app=app, type=1)
         if True:
             # Font
             font = QtGui.QFont(); font.setUnderline(True); self.lblSignup.setFont(font)
@@ -199,15 +202,14 @@ class Ui_winLogin(object):
             # Styling
             self.lblErrors.setStyleSheet("color: red;")
             # Hide by default
-            self.lblErrors.setVisible(False)
+            self.lblErrors.setVisible(True)
 
         # Add to layout
-        self.hLayoutBtn.addWidget(self.btnLogin)
-        self.mainLayout.addLayout(self.hLayoutBtn)
+        self.layoutLogin.addWidget(self.btnLogin)
+        self.layoutMain.addLayout(self.layoutLogin)
 
-        self.mainLayout.addWidget(self.lblErrors, alignment=QtCore.Qt.AlignmentFlag.AlignHCenter)
-        self.mainLayout.addWidget(self.hzwigRedirect, alignment=QtCore.Qt.AlignmentFlag.AlignHCenter)
-        self.mainLayout.addLayout(self.hboxRedirect)
+        self.layoutMain.addWidget(self.lblErrors, alignment=QtCore.Qt.AlignmentFlag.AlignHCenter|QtCore.Qt.AlignmentFlag.AlignTop)
+        self.layoutMain.addWidget(self.frmRedirect, alignment=QtCore.Qt.AlignmentFlag.AlignHCenter|QtCore.Qt.AlignmentFlag.AlignBottom)
         self.hboxRedirect.addWidget(self.lblAskAcc)
         self.hboxRedirect.addWidget(self.lblSignup) 
 
@@ -233,7 +235,7 @@ class Ui_winLogin(object):
         self.lblPass.setText(_translate("winLogin", "<html><head/><body><p>Password:<span style=\" color:red;\">*</span></p></body></html>"))
         self.linePass.setPlaceholderText(_translate("winLogin", "password"))
 
-        self.lblAskAcc.setText(_translate("winLogin", "Don\'t have an account?"))
+        self.lblAskAcc.setText(_translate("winLogin", "Don't have an account?"))
         self.lblSignup.setText(_translate("winLogin", "Sign Up"))
         
         self.lblErrors.setText(_translate("winLogin", "Error messages go here"))
