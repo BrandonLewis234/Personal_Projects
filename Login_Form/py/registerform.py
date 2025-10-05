@@ -44,7 +44,7 @@ class winRegister(QMainWindow):
         self.ui.setupUi(self, app)
         
         if position:
-            set_position(self, position, adjustments=[80,20])
+            set_position(self, position, adjustments=[250,10])
 
 
 # ------------------------------------------------------------------------------------
