@@ -12,3 +12,11 @@ might have to instead use:
 
 C:\\Python\\Python311\\python.exe -m PyQt6.uic.pyuic layout.ui -o layout.py
 
+
+
+**To make translations work:**
+
+(Replace de (german) for any other select languages)
+
+pylupdate5 loginform.py -ts winLogin\_de.ts 
+

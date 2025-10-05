@@ -11,3 +11,6 @@ https://wiki.python.org/moin/PyQt
 	https://www.riverbankcomputing.com/static/Docs/PyQt5/
 https://doc.bccnsoft.com/docs/PyQt5/
 https://coderscratchpad.com/pyqt6-custom-cursors/
+
+	Translations
+	https://doc.qt.io/qtforpython-6/tutorials/basictutorial/translations.html
