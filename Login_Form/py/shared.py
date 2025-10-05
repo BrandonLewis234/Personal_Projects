@@ -5,6 +5,7 @@
 #
 #         Author: Brandon Lewis
 #           Date: 10/4/2025
+#        Updated: 10/4/2025
 #
 #        Summary: Shared styles and functions between forms
 #
@@ -20,6 +21,11 @@ from PyQt6.QtGui import QPalette
 
 from overrides import clickableLabel
 
+# ---------------------------------------------------------------
+# Defines the styles to be used across multiple forms and
+# windows in order to keep consistent styles and to avoid
+# unnecesarily repeating them.
+# ---------------------------------------------------------------
 class share_styles():
     def __init__(self, parent):
         app = parent
@@ -35,6 +41,12 @@ class share_styles():
              "lineEdit": f"background-color: {app.lighterColor.name()};border-radius: 5px;height: 30px;" 
         }
 
+
+# ---------------------------------------------------------------
+# Initializes a window and provides additional functions for
+# adding in additional widgets and elements, such as credential
+# fields for login/signup forms. 
+# ---------------------------------------------------------------
 class make_window():
     def __init__(self, app, window, title="", size=[], max_size=[],
                  header_text=""):
@@ -103,7 +115,7 @@ class make_window():
     # ---------------------------------------------------------------
     # Credential fields
     # ---------------------------------------------------------------
-    def set_credential_fields(self, type='login'):
+    def add_credential_fields(self, type='login'):
         # ---------------------------------------------------------------
         # Universal Widgets
         # ---------------------------------------------------------------
@@ -178,17 +190,14 @@ class make_window():
                 # Hide input
                 self.linePass.setEchoMode(QLineEdit.EchoMode.Password)
 
-
             # Add elements to vertical layout
             self.layoutCred.addWidget(self.lblPass)
             self.layoutCred.addWidget(self.linePass)
-
 
             # Set login text and translations
             # Add a red * character at the end of required fields
             self.lblPass.setText(self.translate(f"{self.window}", "<html><head/><body><p>Password:<span style=\" color:red;\">*</span></p></body></html>"))
             self.linePass.setPlaceholderText(self.translate(f"{self.window}", "password"))
-
 
         if type=='signup':            
             # ------------------------------
@@ -278,7 +287,7 @@ class make_window():
     # ------------------------------        
     # Redirect widgets
     # ------------------------------     
-    def set_redirect_label(self, redirect_to='signup'):
+    def add_redirect_label(self, redirect_to='signup'):
         # Main Frame
         self.frmRedirect = QFrame()
 
@@ -313,10 +322,10 @@ class make_window():
         self.lblRedirect.setText(self.translate(f"{self.window}", "Sign Up"))
 
 
+    # ------------------------------        
+    # Error label
+    # ------------------------------     
     def _set_error_label(self):
-        # ------------------------------        
-        # Error label
-        # ------------------------------     
 
         self.lblErrors = QLabel(parent=self.centralwidget)
         if True:

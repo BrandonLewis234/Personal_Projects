@@ -5,6 +5,7 @@
 #
 #         Author: Brandon Lewis
 #           Date: 9/24/2025
+#        Updated: 10/4/2025
 #
 #        Summary: A simple signup form with the purpose of
 #                 learning PyQt6 and PyQt6-tools.
@@ -54,9 +55,9 @@ class Ui_winRegister(object):
         window = make_window(app, winRegister, title="Signup Form", header_text="Signup",
                               size=[300, 440], max_size=[450,600])
 
-        window.set_credential_fields(type='signup')
+        window.add_credential_fields(type='signup')
 
-        window.set_redirect_label(redirect_to='login')
+        window.add_redirect_label(redirect_to='login')
 
 
 if __name__ == "__main__":

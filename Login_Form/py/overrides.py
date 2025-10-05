@@ -1,3 +1,20 @@
+###############################################################
+#
+#
+#                overrides.py
+#
+#         Author: Brandon Lewis
+#           Date: 10/4/2025
+#        Updated: 10/4/2025
+#
+#        Summary: Provides overrides for existing PyQt6 widgets
+#
+#
+#
+#
+################################################################
+
+
 from PyQt6.QtWidgets import QLabel, QApplication
 from PyQt6.QtCore import QPoint
 from PyQt6.QtGui import QCursor
