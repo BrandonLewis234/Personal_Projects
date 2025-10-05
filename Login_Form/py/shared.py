@@ -14,7 +14,7 @@
 ################################################################
 
 from PyQt6 import QtCore, QtGui
-from PyQt6.QtWidgets import QApplication, QMainWindow, QWidget, QLabel
+from PyQt6.QtWidgets import QWidget, QLabel
 from PyQt6.QtWidgets import QFrame, QPushButton, QVBoxLayout, QHBoxLayout, QLineEdit, QSizePolicy
 from PyQt6.QtGui import QPalette
 

@@ -27,10 +27,7 @@
 # Edited to add additional logic and comments.
 # -------------------------------------------------------------
 
-
-from PyQt6 import QtCore, QtGui
-from PyQt6.QtWidgets import QApplication, QMainWindow, QLabel
-from PyQt6.QtWidgets import QFrame, QPushButton, QHBoxLayout, QLineEdit, QSizePolicy
+from PyQt6.QtWidgets import QApplication, QMainWindow
 
 from overrides import set_position
 from shared import share_styles, make_window

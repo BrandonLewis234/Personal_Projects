@@ -27,12 +27,9 @@
 # Edited to add additional logic and comments.
 # -------------------------------------------------------------
 
-from PyQt6 import QtCore, QtGui
-from PyQt6.QtWidgets import QApplication, QMainWindow, QWidget, QLabel
-from PyQt6.QtWidgets import QFrame, QPushButton, QVBoxLayout, QHBoxLayout, QLineEdit
-from PyQt6.QtGui import QPalette
+from PyQt6.QtWidgets import QApplication, QMainWindow
 
-from overrides import clickableLabel, set_position
+from overrides import set_position
 from shared import share_styles, make_window
 
 # ---------------------------------------------------------------
