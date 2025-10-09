@@ -199,9 +199,9 @@ class make_window():
 
         # Set text and translations for universal widgets
         txtUser = "Username or email" if type=='login' else "Username"
-
+        
         self.lblUser.setText(self.translate(f"{self.window}",             self.mandatory_field(txtUser)))
-        self.lineUser.setPlaceholderText(self.translate(f"{self.window}", txtUser))
+        self.lineUser.setPlaceholderText(self.translate(f"{self.window}", txtUser.lower()))
         self.btnConfirm.setText(self.translate(f"{self.window}",          f"{type[:1].upper()}{type[1:]}"))
 
         # ---------------------------------------------------------------
@@ -309,11 +309,11 @@ class make_window():
             self.lblEmail.setText(self.translate(f"{self.window}",                  self.mandatory_field("Email")))
             self.lineEmail.setPlaceholderText(self.translate(f"{self.window}",      "email"))
             self.lblPassCreate.setText(self.translate(f"{self.window}",             self.mandatory_field("Create password")))
-            self.linePassCreate.setPlaceholderText(self.translate(f"{self.window}", "password"))
+            self.linePassCreate.setPlaceholderText(self.translate(f"{self.window}", "create password"))
             self.pbtnToggleVis.setToolTip(self.translate(f"{self.window}",          "show/hide password"))
             self.pbtnToggleVis.setText(self.translate(f"{self.window}",             "..."))
             self.lblPassConf.setText(self.translate(f"{self.window}",               self.mandatory_field("Confirm password")))
-            self.linePassConf.setPlaceholderText(self.translate(f"{self.window}",   "password"))
+            self.linePassConf.setPlaceholderText(self.translate(f"{self.window}",   "confirm password"))
 
 
     # ---------------------------------------------------------------    
