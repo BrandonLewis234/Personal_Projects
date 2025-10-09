@@ -5,13 +5,10 @@
 #
 #         Author: Brandon Lewis
 #           Date: 9/24/2025
-#        Updated: 10/4/2025
+#        Updated: 10/8/2025
 #
 #        Summary: A simple signup form with the purpose of
 #                 learning PyQt6 and PyQt6-tools.
-# 
-#           NOTE: Any "if True:" blocks are just for formatting
-#                 and for better visualization.
 #
 #
 #
@@ -44,8 +41,7 @@ class winRegister(QMainWindow):
         self.ui.setupUi(self, app)
         
         if position:
-            set_position(self, position, adjustments=[250,10])
-
+            set_position(self, position, adjustments=[240,10])
 
 # ------------------------------------------------------------------------------------
 # Configures the UI for a signup window for use with any other application.
@@ -63,9 +59,8 @@ class Ui_winRegister(object):
 if __name__ == "__main__":
     import sys
 
-    app = QApplication(sys.argv)
+    app = QApplication([])
     share_styles(parent=app)
-    
     window = winRegister(app)
     window.show()
 

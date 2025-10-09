@@ -5,10 +5,13 @@
 #
 #         Author: Brandon Lewis
 #           Date: 10/4/2025
-#        Updated: 10/4/2025
+#        Updated: 10/8/2025
 #
 #        Summary: Shared styles and functions between forms
 #
+# 
+#           NOTE: Any "if True:" blocks are just for formatting
+#                 and for better visualization.
 #
 #
 #
@@ -32,14 +35,43 @@ class share_styles():
         #parent.setStyle("") # windows, windowsvista, fusion, or custom styles
 
         # Fetch the app's palette in order to set colors that derive from the applied theme
-        palette = parent.palette()
-        app.baseColor = palette.color(QPalette.ColorRole.Base)  # Get base color
-        app.lighterColor = app.baseColor.lighter(120) # 120% lighter than base color
-        
+        self.palette = parent.palette()
+
         # Define styles
-        app.styles = {
-             "lineEdit": f"background-color: {app.lighterColor.name()};border-radius: 5px;height: 30px;" 
-        }
+        app.setStyleSheet(
+           f"""
+            QLineEdit            {{ background-color: {(self.get_qpallete_colorrole('Base', as_name=False).lighter(120)).name()};
+                                    border-radius: 5px;height: 30px; }}
+            clickableLabel       {{ color: {self.get_qpallete_colorrole('Link')}; }}
+            clickableLabel:focus {{ color: {self.get_qpallete_colorrole('Link')};
+                                    border-radius: 2px;padding: 2px;
+                                    border: 1px dashed {self.get_qpallete_colorrole('Text')}; }}
+            QLabel#lblError      {{ color: {self.get_qpallete_colorrole('Highlight')}; }}
+            """)
+
+
+    # ------------------------------------------------------------------------------------------------------------------    
+    # Returns either the hex value or the QPallete.ColorRole object
+    # that matches the 'color_role' argument if it exists.
+    #
+    # srcs:
+    #    https://doc.qt.io/qtforpython-6/PySide6/QtWidgets/QApplication.html#PySide6.QtWidgets.QApplication.palette
+    #    https://doc.qt.io/qtforpython-6/PySide6/QtGui/QPalette.html
+    #
+    # Available colors at the link below:
+    # src: https://doc.qt.io/qtforpython-6/PySide6/QtGui/QPalette.html#PySide6.QtGui.QPalette.ColorRole
+    # -----------------------------------------------------------------------------------------------------------------    
+    def get_qpallete_colorrole(self, color_role="", as_name=True):
+         try: 
+            if hasattr(QPalette.ColorRole, color_role):
+                 color = getattr(QPalette.ColorRole, color_role)
+                 color = self.palette.color(color)
+
+                 return color.name() if as_name else color          
+            else:
+                 return "-1: Color not found"
+         except Exception as e:
+              print(f"Failure to retrieve provided color role! Exception raised:\n{e}")
 
 
 # ---------------------------------------------------------------
@@ -69,7 +101,7 @@ class make_window():
 
 
     # ---------------------------------------------------------------
-    # Main layout widgets
+    # Create the main layout widgets
     # ---------------------------------------------------------------
     def _set_main_layout(self):
         # Main vertical layout
@@ -113,7 +145,7 @@ class make_window():
 
 
     # ---------------------------------------------------------------
-    # Credential fields
+    # Create credential fields
     # ---------------------------------------------------------------
     def add_credential_fields(self, type='login'):
         # ---------------------------------------------------------------
@@ -129,9 +161,6 @@ class make_window():
                 font = QtGui.QFont(); font.setBold(True); self.lblUser.setFont(font)
 
         self.lineUser = QLineEdit(parent=self.vframeCred)
-        if True:
-            # Styling
-            self.lineUser.setStyleSheet(self.app.styles["lineEdit"])
         
         # Add error checking
         self._set_error_label()
@@ -161,19 +190,20 @@ class make_window():
         self.layoutMain.addSpacing(50)
 
         # Add elements to main layouts
-        self.layoutConfirm.addWidget(self.btnConfirm)
-        self.layoutMain.addLayout(self.layoutConfirm)
         self.layoutCred.addWidget(self.lblUser)
-        self.layoutCred.addWidget(self.lineUser)      
+        self.layoutCred.addWidget(self.lineUser)    
+        self.layoutMain.addLayout(self.layoutConfirm)
+        self.layoutConfirm.addWidget(self.btnConfirm)  
 
         # Set text and translations for universal widgets
-        self.lblUser.setText(self.translate(f"{self.window}", "<html><head/><body><p>Username:<span style=\" color:red;\">*</span></p></body></html>"))
-        self.lineUser.setPlaceholderText(self.translate(f"{self.window}", "username or email"))
-        self.btnConfirm.setText(self.translate(f"{self.window}", f"{type[:1].upper()}{type[1:]}"))
+        self.lblUser.setText(self.translate(f"{self.window}",              "<html><head/><body><p>Username:<span style=\" color:red;\">*</span></p></body></html>"))
+        self.lineUser.setPlaceholderText(self.translate(f"{self.window}",  "username or email"))
+        self.btnConfirm.setText(self.translate(f"{self.window}",          f"{type[:1].upper()}{type[1:]}"))
 
         # ---------------------------------------------------------------
         # Widgets for specified implementation
         # ---------------------------------------------------------------
+
         if type == 'login':
             # ------------------------------        
             # Password widgets
@@ -185,8 +215,6 @@ class make_window():
             
             self.linePass = QLineEdit(parent=self.vframeCred)
             if True:
-                # Styling
-                self.linePass.setStyleSheet(self.app.styles["lineEdit"])
                 # Hide input
                 self.linePass.setEchoMode(QLineEdit.EchoMode.Password)
 
@@ -194,9 +222,12 @@ class make_window():
             self.layoutCred.addWidget(self.lblPass)
             self.layoutCred.addWidget(self.linePass)
 
+            # Fix tab order
+            self.window.setTabOrder(self.lineUser, self.linePass)
+
             # Set login text and translations
             # Add a red * character at the end of required fields
-            self.lblPass.setText(self.translate(f"{self.window}", "<html><head/><body><p>Password:<span style=\" color:red;\">*</span></p></body></html>"))
+            self.lblPass.setText(self.translate(f"{self.window}",             "<html><head/><body><p>Password:<span style=\" color:red;\">*</span></p></body></html>"))
             self.linePass.setPlaceholderText(self.translate(f"{self.window}", "password"))
 
         if type=='signup':            
@@ -209,10 +240,7 @@ class make_window():
                     font = QtGui.QFont(); font.setBold(True); self.lblEmail.setFont(font)
 
             self.lineEmail = QLineEdit(parent=self.vframeCred)
-            if True:
-                # Styling
-                self.lineEmail.setStyleSheet(self.app.styles["lineEdit"])
-            
+
             # ------------------------------        
             # Password creation widgets
             # ------------------------------        
@@ -232,8 +260,6 @@ class make_window():
 
             self.linePassCreate = QLineEdit(parent=self.frmPassCreate)
             if True:
-                # Styling
-                self.linePassCreate.setStyleSheet(self.app.styles["lineEdit"])
                 # Hide input
                 self.linePassCreate.setEchoMode(QLineEdit.EchoMode.Password)
 
@@ -252,8 +278,6 @@ class make_window():
 
             self.linePassConf = QLineEdit(parent=self.vframeCred)
             if True:
-                # Styling
-                self.linePassConf.setStyleSheet(self.app.styles["lineEdit"])
                 # Hide input
                 self.linePassConf.setEchoMode(QLineEdit.EchoMode.Password)
 
@@ -273,20 +297,24 @@ class make_window():
             self.hboxPassCreate.    addWidget(self.linePassCreate)
             self.hboxPassCreate.    addWidget(self.pbtnToggleVis)
 
+            # Fix tab order
+            self.window.setTabOrder(self.lineEmail, self.lineUser)
+            self.lineEmail.setFocus()
+
             # Set registration text and translations        
-            self.lblEmail.setText(self.translate(f"{self.window}", "<html><head/><body><p>Email:<span style=\" color:red;\">*</span></p></body></html>"))
-            self.lineEmail.setPlaceholderText(self.translate(f"{self.window}", "email"))
-            self.lblPassCreate.setText(self.translate(f"{self.window}", "<html><head/><body><p>Create password:<span style=\" color:red;\">*</span></p></body></html>"))
+            self.lblEmail.setText(self.translate(f"{self.window}",                  "<html><head/><body><p>Email:<span style=\" color:red;\">*</span></p></body></html>"))
+            self.lineEmail.setPlaceholderText(self.translate(f"{self.window}",      "email"))
+            self.lblPassCreate.setText(self.translate(f"{self.window}",             "<html><head/><body><p>Create password:<span style=\" color:red;\">*</span></p></body></html>"))
             self.linePassCreate.setPlaceholderText(self.translate(f"{self.window}", "password"))
-            self.pbtnToggleVis.setToolTip(self.translate(f"{self.window}", "show/hide password"))
-            self.pbtnToggleVis.setText(self.translate(f"{self.window}", "..."))
-            self.lblPassConf.setText(self.translate(f"{self.window}", "<html><head/><body><p>Confirm password:<span style=\" color:red;\">*</span></p></body></html>"))
-            self.linePassConf.setPlaceholderText(self.translate(f"{self.window}", "password"))
+            self.pbtnToggleVis.setToolTip(self.translate(f"{self.window}",          "show/hide password"))
+            self.pbtnToggleVis.setText(self.translate(f"{self.window}",             "..."))
+            self.lblPassConf.setText(self.translate(f"{self.window}",               "<html><head/><body><p>Confirm password:<span style=\" color:red;\">*</span></p></body></html>"))
+            self.linePassConf.setPlaceholderText(self.translate(f"{self.window}",   "password"))
 
 
-    # ------------------------------        
-    # Redirect widgets
-    # ------------------------------     
+    # ---------------------------------------------------------------    
+    # Craete redirect widgets
+    # ---------------------------------------------------------------
     def add_redirect_label(self, redirect_to='signup'):
         # Main Frame
         self.frmRedirect = QFrame()
@@ -305,32 +333,34 @@ class make_window():
         if True:
             # Font
             font = QtGui.QFont(); font.setUnderline(True); self.lblRedirect.setFont(font)
-            # Styling
-            self.lblRedirect.setStyleSheet("color: rgb(0, 170, 255);")
             # Cursor Change
             self.lblRedirect.setCursor(QtGui.QCursor(QtCore.Qt.CursorShape.PointingHandCursor))
  
         # Add to main layout
-        self.layoutMain.addWidget(self.frmRedirect, alignment=QtCore.Qt.AlignmentFlag.AlignHCenter|QtCore.Qt.AlignmentFlag.AlignBottom)
+        self.layoutMain  .addWidget(self.frmRedirect, alignment=QtCore.Qt.AlignmentFlag.AlignHCenter|QtCore.Qt.AlignmentFlag.AlignBottom)
         self.hboxRedirect.addWidget(self.lblAskAcc)
         self.hboxRedirect.addWidget(self.lblRedirect) 
 
+        # Add to tab order
+        self.window.setTabOrder(self.btnConfirm, self.lblRedirect)
+
         # Set text and translations
-        text = "Don't have an account?" if redirect_to == 'register' else "Already have an account?"
-        self.lblAskAcc.setText(self.translate(f"{self.window}", text))
-        self.lblAskAcc.setText(self.translate(f"{self.window}", text))
-        self.lblRedirect.setText(self.translate(f"{self.window}", "Sign Up"))
+        descRedirect = "Don't have an account?" if redirect_to == 'signup' else "Already have an account?"
+        linkRedirect = "Sign Up"                if redirect_to == 'signup' else "Log in"
+
+        self.lblAskAcc  .setText(self.translate(f"{self.window}", descRedirect))
+        self.lblRedirect.setText(self.translate(f"{self.window}", linkRedirect))
 
 
-    # ------------------------------        
-    # Error label
-    # ------------------------------     
+    # ---------------------------------------------------------------     
+    # Create an error label
+    # ---------------------------------------------------------------  
     def _set_error_label(self):
 
         self.lblErrors = QLabel(parent=self.centralwidget)
         if True:
-            # Styling
-            self.lblErrors.setStyleSheet("color: red;")
+            # Styling (set id to reference in style sheet)
+            self.lblErrors.setObjectName('lblError')
             # Hide by default
             self.lblErrors.setVisible(False)
 

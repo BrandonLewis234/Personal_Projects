@@ -5,13 +5,10 @@
 #
 #         Author: Brandon Lewis
 #           Date: 9/30/2025
-#        Updated: 10/4/2025
+#        Updated: 10/8/2025
 #
 #        Summary: A simple signup form with the purpose of
 #                 learning PyQt6 and PyQt6-tools.
-# 
-#           NOTE: Any "if True:" blocks are just for formatting
-#                 and for better visualization.
 #
 #
 #
@@ -33,6 +30,9 @@ from PyQt6.QtWidgets import QApplication, QMainWindow
 from overrides import set_position
 from shared import share_styles, make_window
 
+# ---------------------------------------------------------------
+# Displays the winLogin window as the main window.
+# ---------------------------------------------------------------
 class winLogin(QMainWindow):
     def __init__(self, app, position=None):
         super().__init__()
@@ -41,10 +41,11 @@ class winLogin(QMainWindow):
         self.ui.setupUi(self, app)
 
         if position:
-            set_position(self, position, adjustments=[250,120])
-            
+            set_position(self, position, adjustments=[240,130])
 
-
+# ------------------------------------------------------------------------------------
+# Configures the UI for a login window for use with any other application.
+# ------------------------------------------------------------------------------------           
 class Ui_winLogin(object):
     def setupUi(self, winLogin, app):
         window = make_window(app, winLogin, title="Login Form", header_text="Login",
@@ -58,7 +59,7 @@ class Ui_winLogin(object):
 if __name__ == "__main__":
     import sys
 
-    app = QApplication(sys.argv)
+    app = QApplication([])
     share_styles(parent=app)
     
     window = winLogin(app)

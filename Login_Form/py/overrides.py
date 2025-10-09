@@ -16,8 +16,8 @@
 
 
 from PyQt6.QtWidgets import QLabel, QApplication
-from PyQt6.QtCore import QPoint
-from PyQt6.QtGui import QCursor
+from PyQt6.QtCore import Qt, QPoint
+from PyQt6.QtGui import QCursor, QKeyEvent
 
 # ---------------------------------------------------------------
 # When the user clicks on lblLogin:
@@ -30,8 +30,20 @@ class clickableLabel(QLabel):
                 self.root   = root
                 self.app    = app
                 self.type   = type
+                
+                # Enable focus
+                # src: https://doc.qt.io/qtforpython-6/PySide6/QtWidgets/QWidget.html#PySide6.QtWidgets.QWidget.focusPolicy
+                self.setFocusPolicy(Qt.FocusPolicy.TabFocus)
 
-        def mousePressEvent(self, event):
+        # src: https://doc.qt.io/qtforpython-6/PySide6/QtWidgets/QWidget.html#PySide6.QtWidgets.QWidget.keyReleaseEvent
+        def keyReleaseEvent(self, event: QKeyEvent):
+               # src: https://doc.qt.io/qtforpython-6/PySide6/QtCore/Qt.html#PySide6.QtCore.Qt.Key
+               if event.key() in (Qt.Key.Key_Return, Qt.Key.Key_Enter):
+                      self.activate()
+        def mouseReleaseEvent(self, event):
+                self.activate()
+
+        def activate(self):
                 self.point = QCursor.pos()
                 if self.type == 'login':
 
