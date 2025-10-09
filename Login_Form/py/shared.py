@@ -36,8 +36,10 @@ class share_styles():
 
         # Fetch the app's palette in order to set colors that derive from the applied theme
         self.palette = parent.palette()
-
+        app.color_highlight = self.get_qpallete_colorrole('Highlight')
+    
         # Define styles
+        # src: https://doc.qt.io/qt-6/stylesheet-examples.html
         app.setStyleSheet(
            f"""
             QLineEdit            {{ background-color: {(self.get_qpallete_colorrole('Base', as_name=False).lighter(120)).name()};
@@ -46,7 +48,7 @@ class share_styles():
             clickableLabel:focus {{ color: {self.get_qpallete_colorrole('Link')};
                                     border-radius: 2px;padding: 2px;
                                     border: 1px dashed {self.get_qpallete_colorrole('Text')}; }}
-            QLabel#lblError      {{ color: {self.get_qpallete_colorrole('Highlight')}; }}
+            QLabel#lblError      {{ color: {app.color_highlight} }}
             """)
 
 
@@ -196,8 +198,10 @@ class make_window():
         self.layoutConfirm.addWidget(self.btnConfirm)  
 
         # Set text and translations for universal widgets
-        self.lblUser.setText(self.translate(f"{self.window}",              "<html><head/><body><p>Username:<span style=\" color:red;\">*</span></p></body></html>"))
-        self.lineUser.setPlaceholderText(self.translate(f"{self.window}",  "username or email"))
+        txtUser = "username or email" if type=='login' else "username"
+
+        self.lblUser.setText(self.translate(f"{self.window}",             self.mandatory_field(txtUser)))
+        self.lineUser.setPlaceholderText(self.translate(f"{self.window}", txtUser))
         self.btnConfirm.setText(self.translate(f"{self.window}",          f"{type[:1].upper()}{type[1:]}"))
 
         # ---------------------------------------------------------------
@@ -227,7 +231,7 @@ class make_window():
 
             # Set login text and translations
             # Add a red * character at the end of required fields
-            self.lblPass.setText(self.translate(f"{self.window}",             "<html><head/><body><p>Password:<span style=\" color:red;\">*</span></p></body></html>"))
+            self.lblPass.setText(self.translate(f"{self.window}",             self.mandatory_field("Password")))
             self.linePass.setPlaceholderText(self.translate(f"{self.window}", "password"))
 
         if type=='signup':            
@@ -302,13 +306,13 @@ class make_window():
             self.lineEmail.setFocus()
 
             # Set registration text and translations        
-            self.lblEmail.setText(self.translate(f"{self.window}",                  "<html><head/><body><p>Email:<span style=\" color:red;\">*</span></p></body></html>"))
+            self.lblEmail.setText(self.translate(f"{self.window}",                  self.mandatory_field("Email")))
             self.lineEmail.setPlaceholderText(self.translate(f"{self.window}",      "email"))
-            self.lblPassCreate.setText(self.translate(f"{self.window}",             "<html><head/><body><p>Create password:<span style=\" color:red;\">*</span></p></body></html>"))
+            self.lblPassCreate.setText(self.translate(f"{self.window}",             self.mandatory_field("Create password")))
             self.linePassCreate.setPlaceholderText(self.translate(f"{self.window}", "password"))
             self.pbtnToggleVis.setToolTip(self.translate(f"{self.window}",          "show/hide password"))
             self.pbtnToggleVis.setText(self.translate(f"{self.window}",             "..."))
-            self.lblPassConf.setText(self.translate(f"{self.window}",               "<html><head/><body><p>Confirm password:<span style=\" color:red;\">*</span></p></body></html>"))
+            self.lblPassConf.setText(self.translate(f"{self.window}",               self.mandatory_field("Confirm password")))
             self.linePassConf.setPlaceholderText(self.translate(f"{self.window}",   "password"))
 
 
@@ -369,7 +373,14 @@ class make_window():
         # Set text and translation
         self.lblErrors.setText(self.translate(f"{self.window}", "Error messages go here"))
     
-    
+
+    # ---------------------------------------------------------------
+    # Returns provided string with a highlighted '*' after it
+    # ---------------------------------------------------------------
+    def mandatory_field(self, text):
+        return f"<html><head/><body><p>{text}<span style=\" color:{self.app.color_highlight};\">*</span></p></body></html>"
+
+
     # ---------------------------------------------------------------
     # Add titles for widgets and ensure they 
     # translate to the user's set langauge
