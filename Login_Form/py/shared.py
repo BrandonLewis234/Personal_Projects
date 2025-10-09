@@ -198,7 +198,7 @@ class make_window():
         self.layoutConfirm.addWidget(self.btnConfirm)  
 
         # Set text and translations for universal widgets
-        txtUser = "username or email" if type=='login' else "username"
+        txtUser = "Username or email" if type=='login' else "Username"
 
         self.lblUser.setText(self.translate(f"{self.window}",             self.mandatory_field(txtUser)))
         self.lineUser.setPlaceholderText(self.translate(f"{self.window}", txtUser))
