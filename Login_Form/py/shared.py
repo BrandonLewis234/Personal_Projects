@@ -5,7 +5,7 @@
 #
 #         Author: Brandon Lewis
 #           Date: 10/4/2025
-#        Updated: 10/8/2025
+#        Updated: 11/5/2025
 #
 #        Summary: Shared styles and functions between forms
 #
@@ -23,6 +23,9 @@ from PyQt6.QtWidgets import QFrame, QPushButton, QVBoxLayout, QHBoxLayout, QLine
 from PyQt6.QtGui import QPalette
 
 from overrides import clickableLabel
+
+import json
+import bcrypt
 
 # ---------------------------------------------------------------
 # Defines the styles to be used across multiple forms and
@@ -48,7 +51,7 @@ class share_styles():
             clickableLabel:focus {{ color: {self.get_qpallete_colorrole('Link')};
                                     border-radius: 2px;padding: 2px;
                                     border: 1px dashed {self.get_qpallete_colorrole('Text')}; }}
-            QLabel#lblError      {{ color: {app.color_highlight} }}
+            QLabel#lblError      {{ color: {app.color_highlight}; padding-left: 10px;}}
             """)
 
 
@@ -75,7 +78,6 @@ class share_styles():
          except Exception as e:
               print(f"Failure to retrieve provided color role! Exception raised:\n{e}")
 
-
 # ---------------------------------------------------------------
 # Initializes a window and provides additional functions for
 # adding in additional widgets and elements, such as credential
@@ -84,10 +86,13 @@ class share_styles():
 class make_window():
     def __init__(self, app, window, title="", size=[], max_size=[],
                  header_text=""):
+        
         self.app = app
         self.size = size
         self.window = window
         self.headerText = header_text
+
+        self.required_fields = {}
         
         self.window.setMinimumSize(size[0], size[1] + 30)
         self.window.setMaximumSize(max_size[0], max_size[1])
@@ -181,6 +186,8 @@ class make_window():
             self.btnConfirm.setCursor(QtGui.QCursor(QtCore.Qt.CursorShape.PointingHandCursor))
             # Expansion Policy
             self.btnConfirm.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Maximum)
+            # Button functionality
+            self.btnConfirm.clicked.connect(lambda: self.confirmation_button_trigger(type=type))
 
         # Horizontal layout for confirmation button
         self.layoutConfirm = QHBoxLayout()
@@ -200,7 +207,7 @@ class make_window():
         # Set text and translations for universal widgets
         txtUser = "Username or email" if type=='login' else "Username"
         
-        self.lblUser.setText(self.translate(f"{self.window}",             self.mandatory_field(txtUser)))
+        self.lblUser.setText(self.translate(f"{self.window}",             self.mandatory_field(self.lineUser, txtUser)))
         self.lineUser.setPlaceholderText(self.translate(f"{self.window}", txtUser.lower()))
         self.btnConfirm.setText(self.translate(f"{self.window}",          f"{type[:1].upper()}{type[1:]}"))
 
@@ -231,7 +238,7 @@ class make_window():
 
             # Set login text and translations
             # Add a red * character at the end of required fields
-            self.lblPass.setText(self.translate(f"{self.window}",             self.mandatory_field("Password")))
+            self.lblPass.setText(self.translate(f"{self.window}",             self.mandatory_field(self.linePass, "Password")))
             self.linePass.setPlaceholderText(self.translate(f"{self.window}", "password"))
 
         if type=='signup':            
@@ -306,13 +313,13 @@ class make_window():
             self.lineEmail.setFocus()
 
             # Set registration text and translations        
-            self.lblEmail.setText(self.translate(f"{self.window}",                  self.mandatory_field("Email")))
+            self.lblEmail.setText(self.translate(f"{self.window}",                  self.mandatory_field(self.lineEmail, "Email")))
             self.lineEmail.setPlaceholderText(self.translate(f"{self.window}",      "email"))
-            self.lblPassCreate.setText(self.translate(f"{self.window}",             self.mandatory_field("Create password")))
+            self.lblPassCreate.setText(self.translate(f"{self.window}",             self.mandatory_field(self.linePassCreate, "Create password")))
             self.linePassCreate.setPlaceholderText(self.translate(f"{self.window}", "create password"))
             self.pbtnToggleVis.setToolTip(self.translate(f"{self.window}",          "show/hide password"))
             self.pbtnToggleVis.setText(self.translate(f"{self.window}",             "..."))
-            self.lblPassConf.setText(self.translate(f"{self.window}",               self.mandatory_field("Confirm password")))
+            self.lblPassConf.setText(self.translate(f"{self.window}",               self.mandatory_field(self.linePassConf, "Confirm password")))
             self.linePassConf.setPlaceholderText(self.translate(f"{self.window}",   "confirm password"))
 
 
@@ -367,8 +374,10 @@ class make_window():
             self.lblErrors.setObjectName('lblError')
             # Hide by default
             self.lblErrors.setVisible(False)
-
-        self.layoutMain.addWidget(self.lblErrors, alignment=QtCore.Qt.AlignmentFlag.AlignHCenter|QtCore.Qt.AlignmentFlag.AlignTop)
+            # Settings
+            self.lblErrors.setWordWrap(True)
+            
+        self.layoutMain.addWidget(self.lblErrors)
         
         # Set text and translation
         self.lblErrors.setText(self.translate(f"{self.window}", "Error messages go here"))
@@ -377,7 +386,8 @@ class make_window():
     # ---------------------------------------------------------------
     # Returns provided string with a highlighted '*' after it
     # ---------------------------------------------------------------
-    def mandatory_field(self, text):
+    def mandatory_field(self, field, text):
+        self.required_fields[field] = text
         return f"<html><head/><body><p>{text}<span style=\" color:{self.app.color_highlight};\">*</span></p></body></html>"
 
 
@@ -390,3 +400,96 @@ class make_window():
         self.translate = QtCore.QCoreApplication.translate
 
         return self.translate(window, text)
+    
+
+    # ---------------------------------------------------------------
+    # Button triggers
+    # ---------------------------------------------------------------
+    def confirmation_button_trigger(self, type='login'):
+        missing_fields = self.show_missing_fields()
+        if missing_fields:
+            return
+
+        user_database = self.load_users_from_file()
+        username = self.lineUser.text()
+
+        if type == 'signup':
+            hashed_password = self.hash_password(self.linePassConf.text())
+            self.save_user_to_file(username, hashed_password, email=self.lineEmail.text())
+            print("signup success")
+
+        elif type == 'login':
+            password = self.linePass.text()
+            username = self.check_if_email(username, user_database)
+                
+            stored_hash = user_database.get(username, {}).get('password')
+            if stored_hash and self.check_password_against_hash(password, stored_hash):
+                print("login success")
+            else:
+                print("login fail")
+
+    
+    def show_missing_fields(self):
+        missing_fields = []
+        for key, value in self.required_fields.items():
+            if key.text() == "":
+                missing_fields.append(value)
+            
+            str_to_show = "Missing fields: "
+            for i, field in enumerate(missing_fields):
+                if i == len(missing_fields) - 1:
+                    str_to_show += f"{field}"
+                    continue
+                str_to_show += f"{field}, "  
+
+        if str_to_show == "Missing fields: ":
+            self.lblErrors.setVisible(False)
+            return False
+        else:
+            self.lblErrors.setVisible(True)
+            self.lblErrors.setText(str_to_show)
+            return True
+        
+
+    def check_if_email(self, user_input, user_database):
+        if user_input in user_database:
+            return user_input
+        
+        for user in user_database.keys():
+            email = user_database.get(user).get('email')
+            if email == user_input:
+                return user
+
+
+    def save_user_to_file(self, username, hashed_password, email, filename='users.json'):
+        try:
+            with open(filename, 'r') as f:
+                user_database = json.load(f)
+        except (FileNotFoundError, json.JSONDecodeError):
+            user_database = {}
+
+        user_database[username] = {
+            'password': hashed_password,
+            'email':    email
+        }
+
+        with open(filename, 'w') as f:
+            json.dump(user_database, f)
+
+    def load_users_from_file(self, filename='users.json'):
+        try:
+            with open(filename, 'r') as f:
+                return json.load(f)
+        except (FileNotFoundError, json.JSONDecodeError):
+            return {}
+
+
+    #src: https://www.geeksforgeeks.org/python/hashing-passwords-in-python-with-bcrypt/
+    def hash_password(self, password):
+        salt = bcrypt.gensalt()
+        hashed = bcrypt.hashpw(password.encode(), salt)
+        return hashed.decode()
+
+    def check_password_against_hash(self, password, hashed):
+        return bcrypt.checkpw(password.encode(), hashed.encode())
+
