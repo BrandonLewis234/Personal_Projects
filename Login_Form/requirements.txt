@@ -10,6 +10,7 @@
 pyqt6-tools==6.4.2.3.3  # Qt Designer and tools compatible with PyQt6 6.4.2
 pyqt6==6.9.1          	# Latest stable PyQt6 with windows theme matching support
 sip==6.12.0            	# Required for PyQt6 internals
+bcrypt==5.0.0		# Required for encoding passwords
 #-------------------------------------------------------------------------------------
 
 #-------------------------------------------------------------------------------------
@@ -21,8 +22,8 @@ sip==6.12.0            	# Required for PyQt6 internals
 # pip install pyqt6==6.9.1
 # It will say its incompatible. Ignore this aswell.
 #
-# This is a very strange work around for 
-# getting the correct configuration, but it does work.
+# This is a very strange work around for getting the correct configuration, 
+# but it does work.
 #-------------------------------------------------------------------------------------
 
 
