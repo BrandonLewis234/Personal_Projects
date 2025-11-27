@@ -52,11 +52,16 @@ class ErrorField():
         parent.lblErrors.setText("")
 
 
+from PyQt6.QtWidgets import QLineEdit
+
 class AllFields():
 
     def clear_all(parent):
         widgets = [parent.lineUser, parent.lineEmail, parent.linePassConf, parent.linePassCreate]
 
         for widget in widgets:
-            if widget.isReadOnly(): widget.setReadOnly(False)
+            if widget in (parent.linePassConf, parent.linePassCreate):
+                widget.setEchoMode(QLineEdit.EchoMode.Password)
+                widget.setReadOnly(False)
+                
             widget.clear()

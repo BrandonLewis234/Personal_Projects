@@ -69,13 +69,17 @@ class UserRegistration():
 
                 txt_to_show  = f"{type} already in use. Please try another."
 
-                ErrorField.show_error(parent, error_message=txt_to_show)
+                ErrorField.show_error(parent, error_message=txt_to_show, append=True)
+                signup_failed = True
+
+            elif len(username) < 3:
+                ErrorField.show_error(parent, error_message="Username must be 3 characters or longer.", append=True)
                 signup_failed = True
 
 
             if signup_failed: return
 
-            hashed_password = UserRegistration.__hash_password(confirmed_pass)
+            hashed_password = UserRegistration.__hash_password(created_pass)
             UserRegistration.__save_user_to_file(username, hashed_password, email)
             print("signup success")
 
