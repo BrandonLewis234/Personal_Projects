@@ -5,7 +5,7 @@
 #
 #         Author: Brandon Lewis
 #           Date: 10/4/2025
-#        Updated: 11/5/2025
+#        Updated: 11/26/2025
 #
 #        Summary: Shared styles and functions between forms
 #
@@ -23,9 +23,7 @@ from PyQt6.QtWidgets import QFrame, QPushButton, QVBoxLayout, QHBoxLayout, QLine
 from PyQt6.QtGui import QPalette
 
 from overrides import clickableLabel
-
-import json
-import bcrypt
+from userregistration import UserRegistration
 
 # ---------------------------------------------------------------
 # Defines the styles to be used across multiple forms and
@@ -187,7 +185,7 @@ class make_window():
             # Expansion Policy
             self.btnConfirm.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Maximum)
             # Button functionality
-            self.btnConfirm.clicked.connect(lambda: self.confirmation_button_trigger(type=type))
+            self.btnConfirm.clicked.connect(lambda: UserRegistration.confirmation_button_trigger(self, type=type))
 
         # Horizontal layout for confirmation button
         self.layoutConfirm = QHBoxLayout()
@@ -400,96 +398,4 @@ class make_window():
         self.translate = QtCore.QCoreApplication.translate
 
         return self.translate(window, text)
-    
-
-    # ---------------------------------------------------------------
-    # Button triggers
-    # ---------------------------------------------------------------
-    def confirmation_button_trigger(self, type='login'):
-        missing_fields = self.show_missing_fields()
-        if missing_fields:
-            return
-
-        user_database = self.load_users_from_file()
-        username = self.lineUser.text()
-
-        if type == 'signup':
-            hashed_password = self.hash_password(self.linePassConf.text())
-            self.save_user_to_file(username, hashed_password, email=self.lineEmail.text())
-            print("signup success")
-
-        elif type == 'login':
-            password = self.linePass.text()
-            username = self.check_if_email(username, user_database)
-                
-            stored_hash = user_database.get(username, {}).get('password')
-            if stored_hash and self.check_password_against_hash(password, stored_hash):
-                print("login success")
-            else:
-                print("login fail")
-
-    
-    def show_missing_fields(self):
-        missing_fields = []
-        for key, value in self.required_fields.items():
-            if key.text() == "":
-                missing_fields.append(value)
-            
-            str_to_show = "Missing fields: "
-            for i, field in enumerate(missing_fields):
-                if i == len(missing_fields) - 1:
-                    str_to_show += f"{field}"
-                    continue
-                str_to_show += f"{field}, "  
-
-        if str_to_show == "Missing fields: ":
-            self.lblErrors.setVisible(False)
-            return False
-        else:
-            self.lblErrors.setVisible(True)
-            self.lblErrors.setText(str_to_show)
-            return True
-        
-
-    def check_if_email(self, user_input, user_database):
-        if user_input in user_database:
-            return user_input
-        
-        for user in user_database.keys():
-            email = user_database.get(user).get('email')
-            if email == user_input:
-                return user
-
-
-    def save_user_to_file(self, username, hashed_password, email, filename='users.json'):
-        try:
-            with open(filename, 'r') as f:
-                user_database = json.load(f)
-        except (FileNotFoundError, json.JSONDecodeError):
-            user_database = {}
-
-        user_database[username] = {
-            'password': hashed_password,
-            'email':    email
-        }
-
-        with open(filename, 'w') as f:
-            json.dump(user_database, f)
-
-    def load_users_from_file(self, filename='users.json'):
-        try:
-            with open(filename, 'r') as f:
-                return json.load(f)
-        except (FileNotFoundError, json.JSONDecodeError):
-            return {}
-
-
-    #src: https://www.geeksforgeeks.org/python/hashing-passwords-in-python-with-bcrypt/
-    def hash_password(self, password):
-        salt = bcrypt.gensalt()
-        hashed = bcrypt.hashpw(password.encode(), salt)
-        return hashed.decode()
-
-    def check_password_against_hash(self, password, hashed):
-        return bcrypt.checkpw(password.encode(), hashed.encode())
 

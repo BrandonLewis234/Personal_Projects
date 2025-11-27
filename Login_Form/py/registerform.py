@@ -38,6 +38,7 @@ class winRegister(QMainWindow):
         super().__init__()
         self.ui = Ui_winRegister()
         
+
         self.ui.setupUi(self, app)
         
         if position:
@@ -49,7 +50,7 @@ class winRegister(QMainWindow):
 class Ui_winRegister(object):
     def setupUi(self, winRegister, app):
         window = make_window(app, winRegister, title="Signup Form", header_text="Signup",
-                              size=[300, 440], max_size=[450,600])
+                              size=[300, 500], max_size=[450,600])
 
         window.add_credential_fields(type='signup')
 
