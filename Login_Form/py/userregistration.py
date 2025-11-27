@@ -19,10 +19,12 @@ import bcrypt
 
 from email_validator import validate_email, EmailNotValidError, caching_resolver
 
+from utilityfunctions import ErrorField, AllFields
+
 class UserRegistration():
 
-    def confirmation_button_trigger(parent, type='login'):
-        missing_fields = UserRegistration.__show_missing_fields(parent)
+    def confirmation_button_trigger(parent, type):
+        missing_fields = ErrorField.show_missing_fields(parent)
 
         if missing_fields:
             return
@@ -31,21 +33,45 @@ class UserRegistration():
         username      = parent.lineUser.text()
 
         if type == 'signup':
-            signup_failed  = False
+            signup_failed        = False
 
-            email          = parent.lineEmail.text()
-            created_pass   = parent.linePassCreate.text()
-            confirmed_pass = parent.linePassConf.text()
-            
+            email                = parent.lineEmail.text()
+            created_pass         = parent.linePassCreate.text()
+
+            confirmed_pass_field = parent.linePassConf
+            confirmed_pass       = confirmed_pass_field.text()
+
+
             try:    
-                validate_email(email, strict=True, dns_resolver=caching_resolver(cache=None, timeout=10))
+                validated_email = validate_email(email, strict=True, dns_resolver=caching_resolver(cache=None, timeout=10))
             except EmailNotValidError as e: 
-                UserRegistration.__show_error(parent, error_message=f"Email is not vaild. Please input a valid email:\n{str(e)}")
+                ErrorField.show_error(parent, error_message=f"Email is not vaild. Please input a valid email:\n{str(e)}")
                 signup_failed = True
 
-            if created_pass != confirmed_pass:
-                UserRegistration.__show_error(parent, error_message="Password do not match.", append=True)
+
+            if created_pass != confirmed_pass and not confirmed_pass_field.isReadOnly():
+                ErrorField.show_error(parent, error_message="Password do not match.", append=True)
                 signup_failed = True
+            
+
+            existing_user = None; existing_email = None
+            existing_user = UserRegistration.__check_if_user_in_database(username, user_database)
+            if 'validated_email' in locals(): 
+                existing_email = UserRegistration.__check_if_user_in_database(validated_email.original, user_database)
+
+            if existing_user or existing_email:
+                if existing_user is not None and existing_email is not None:                                                     
+                    type = "Username and email are"
+                elif existing_user is not None and existing_email is None : 
+                    type = "Username is"
+                elif existing_user is None and existing_email is not None : 
+                    type = "Email is"
+
+                txt_to_show  = f"{type} already in use. Please try another."
+
+                ErrorField.show_error(parent, error_message=txt_to_show)
+                signup_failed = True
+
 
             if signup_failed: return
 
@@ -53,7 +79,8 @@ class UserRegistration():
             UserRegistration.__save_user_to_file(username, hashed_password, email)
             print("signup success")
 
-            UserRegistration.__clear_errors(parent)
+            ErrorField.clear_errors(parent)
+            AllFields .clear_all(parent)
 
         elif type == 'login':
             password = parent.linePass.text()
@@ -67,42 +94,6 @@ class UserRegistration():
             else:
                 print("login fail")
 
-    
-    def __show_missing_fields(parent):
-        missing_fields = []
-        for key, value in parent.required_fields.items():
-            if key.text() == "":
-                missing_fields.append(value)
-            
-            str_to_show = "Missing fields: "
-            for i, field in enumerate(missing_fields):
-                if i == len(missing_fields) - 1:
-                    str_to_show += f"{field}"
-                    continue
-                str_to_show += f"{field}, "  
-
-        if str_to_show == "Missing fields: ":
-            UserRegistration.__clear_errors(parent)
-            return False
-        else:
-            UserRegistration.__show_error(parent, str_to_show)
-            return True
-        
-    def __show_error(parent, error_message, append=False):
-        parent.lblErrors.setVisible(True)
-        
-        txt_to_show = error_message
-
-        if append:
-            previous_text = parent.lblErrors.text()
-            txt_to_show += f"\n{previous_text}"
-
-        parent.lblErrors.setText(txt_to_show)
-
-    def __clear_errors(parent):
-        parent.lblErrors.setVisible(False)
-        parent.lblErrors.setText("")
-        
 
     def __check_if_user_in_database(user_input, user_database):
         if user_input in user_database:

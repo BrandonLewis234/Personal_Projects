@@ -23,7 +23,7 @@ from PyQt6.QtWidgets import QFrame, QPushButton, QVBoxLayout, QHBoxLayout, QLine
 from PyQt6.QtGui import QPalette
 
 from overrides import clickableLabel
-from userregistration import UserRegistration
+from buttontriggers import ButtonTriggers
 
 # ---------------------------------------------------------------
 # Defines the styles to be used across multiple forms and
@@ -45,6 +45,7 @@ class share_styles():
            f"""
             QLineEdit            {{ background-color: {(self.get_qpallete_colorrole('Base', as_name=False).lighter(120)).name()};
                                     border-radius: 5px;height: 30px; }}
+            QLineEdit:read-only  {{ background-color: {(self.get_qpallete_colorrole('Base', as_name=False).darker(110)).name()};}}
             clickableLabel       {{ color: {self.get_qpallete_colorrole('Link')}; }}
             clickableLabel:focus {{ color: {self.get_qpallete_colorrole('Link')};
                                     border-radius: 2px;padding: 2px;
@@ -185,7 +186,7 @@ class make_window():
             # Expansion Policy
             self.btnConfirm.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Maximum)
             # Button functionality
-            self.btnConfirm.clicked.connect(lambda: UserRegistration.confirmation_button_trigger(self, type=type))
+            self.btnConfirm.clicked.connect(lambda: ButtonTriggers.confirmation_button_callback(self, type=type))
 
         # Horizontal layout for confirmation button
         self.layoutConfirm = QHBoxLayout()
@@ -279,6 +280,8 @@ class make_window():
                     self.pbtnToggleVis.setFixedSize(QtCore.QSize(30, 30))
                     # Cursor change
                     self.pbtnToggleVis.setCursor(QtGui.QCursor(QtCore.Qt.CursorShape.PointingHandCursor))
+                    # Button functionality
+                    self.pbtnToggleVis.clicked.connect(lambda: ButtonTriggers.password_visibility_button_callback(self))
 
             self.lblPassConf = QLabel(parent=self.vframeCred)
             if True:
