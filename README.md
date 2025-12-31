@@ -1,4 +1,8 @@
 # Personal_Projects
 Various projects that I have worked on
 
-Currently just the Login and Signup form I have been working on is stored here.
+### Projects include:
+
+Signup/Login form with password hashing and json storage of users.
+
+.NET Blazor Web Application Clicker Game
