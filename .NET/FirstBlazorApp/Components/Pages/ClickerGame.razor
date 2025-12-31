@@ -1,0 +1,188 @@
+﻿@page "/clickergame"
+@rendermode InteractiveServer
+
+<PageTitle>Clicker Game</PageTitle>
+
+<h3>Total count: @TotalCount</h3>
+
+<div style="display: flex; gap: 10px; align-items: center;">
+    @foreach (var counter in Counters)
+    {
+        <div style="padding: 10px;">
+            <p role="status" style="margin: 0; padding-bottom: 5px">Counter @counter.ID: @counter.CurrentCount</p>
+            <button class="btn btn-primary" @onclick="() => IncrementCount(counter)">Click me</button>
+        </div>
+    }
+</div>
+
+<h4>Upgrades</h4>
+
+@foreach (var upgrade in inventory.Upgrades)
+{
+    <button class="btn btn-success m-1" @onclick="() => BuyUpgrade(upgrade.Key)">
+        Buy upgrade: @upgrade.Key (Cost: @upgrade.Value)
+    </button>
+}
+
+@foreach (var boughtupgrade in inventory.BoughtUpgrades)
+{
+    <button class="btn btn-outline-success m-1" disabled>
+        Bought upgrade: @boughtupgrade
+    </button>
+}
+
+@if (!string.IsNullOrEmpty(Message))
+{
+    <p class="mt-3">@Message</p>
+}
+
+@code {
+    // Inventory holds upgrades with cost and name
+    class Inventory
+    {
+        public Dictionary<string, int> Upgrades { get; } = new();
+        public List<string> BoughtUpgrades { get; } = new List<string>();
+
+        public void AddUpgrade(string name, int cost)
+        {
+            Upgrades[name] = cost;
+        }
+
+        public void RemoveUpgrade(string name)
+        {
+            if (Upgrades.ContainsKey(name))
+            {
+                Upgrades.Remove(name);
+                BoughtUpgrades.Add(name);
+            }
+        }
+    }
+
+    // Represents a counter with ID, current count, and increment amount
+    class CounterState
+    {
+        public int ID { get; }
+        public int CurrentCount { get; set; }
+        public int IncrementAmount { get; set; }
+
+        public CounterState(int id, int currentCount, int incrementAmount)
+        {
+            ID = id;
+            CurrentCount = currentCount;
+            IncrementAmount = incrementAmount;
+        }
+    }
+
+    List<CounterState> Counters = new()
+    {
+        new CounterState(0, 0, 1) // Initial main counter
+    };
+
+    Inventory inventory = new();
+
+    string Message = string.Empty;
+
+    protected override void OnInitialized()
+    {
+        // Add upgrades here
+        inventory.AddUpgrade("Double Click (Counter 0)", 50);
+        inventory.AddUpgrade("x10 Button", 100);
+    }
+
+    async void SetMessage(string text, int timeout=8000)
+    {
+        Message = text;
+        StateHasChanged(); // Refresh UI immediately
+
+        if (timeout < 99999)
+        {
+            await Task.Delay(timeout);
+
+            // Clear the message and refresh UI
+            Message = string.Empty;
+            StateHasChanged();
+        }
+
+    }
+
+    int TotalCount => Counters.Sum(c => c.CurrentCount);
+
+    void IncrementCount(CounterState counter)
+    {
+        counter.CurrentCount += counter.IncrementAmount;
+    }
+
+    void AddCounter(int currentCount, int incrementAmount)
+    {
+        int newId = Counters.Count;
+        Counters.Add(new CounterState(newId, currentCount, incrementAmount));
+    }
+
+    // Spend cost by decrementing counters starting from the largest CurrentCount
+    bool TrySpendCost(int cost)
+    {
+        if (TotalCount < cost) { return false; }
+
+        int remainingCost = cost;
+
+        // Sort counters descending by CurrentCount
+        var countersByCount = Counters.OrderByDescending(c => c.CurrentCount).ToList();
+
+        foreach (var counter in countersByCount)
+        {
+            if (counter.CurrentCount >= remainingCost)
+            {
+                counter.CurrentCount -= remainingCost;
+                remainingCost = 0;
+                break;
+            }
+            else
+            {
+                remainingCost -= counter.CurrentCount;
+                counter.CurrentCount = 0;
+            }
+        }
+
+        return remainingCost == 0;
+    }
+
+    void BuyUpgrade(string upgradeName)
+    {
+        var upgradeEntry = inventory.Upgrades.FirstOrDefault(u => u.Key == upgradeName);
+
+        if (upgradeEntry.Equals(default(KeyValuePair<string, int>)))
+        {
+            SetMessage("Upgrade not found.");
+            return;
+        }
+
+        int cost = upgradeEntry.Value;
+
+        if (TrySpendCost(cost))
+        {
+            switch (upgradeName)
+            {
+                case "Double Click (Counter 0)":
+                    var mainCounter = Counters.First(c => c.ID == 0);
+                    mainCounter.IncrementAmount *= 2;
+                    SetMessage("Upgrade purchased: Double Click! Your clicks now count double.");
+                    inventory.RemoveUpgrade(upgradeName);
+                    break;
+
+                case "x10 Button":
+                    AddCounter(0, 10);
+                    SetMessage("Upgrade purchased: x10 Button! Enjoy your new button.");
+                    inventory.RemoveUpgrade(upgradeName);
+                    break;
+
+                default:
+                    SetMessage($"Upgrade effect for '{upgradeName}' not implemented.");
+                    break;
+            }
+        }
+        else
+        {
+            SetMessage($"Not enough total count to buy '{upgradeName}'. You need {cost} but have {TotalCount}.", timeout: 5000);
+        }
+    }
+}
