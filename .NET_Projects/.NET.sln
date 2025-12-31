@@ -7,7 +7,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "HelloWorld_ConsoleApp", "He
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HelloWorld_ConsoleApp", "HelloWorld_ConsoleApp\HelloWorld_ConsoleApp\HelloWorld_ConsoleApp.csproj", "{B8CC0EBC-8FCB-1484-F370-3A8E04DE9D07}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FirstBlazorApp", "FirstBlazorApp\FirstBlazorApp.csproj", "{79BEB32F-9FD1-49AC-B8EB-7818EE126C9F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FirstBlazorApp", "FirstBlazorApp\FirstBlazorApp\FirstBlazorApp.csproj", "{79BEB32F-9FD1-49AC-B8EB-7818EE126C9F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
