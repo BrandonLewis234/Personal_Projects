@@ -34,4 +34,54 @@ The Movie class contains:
 
 <a href="https://learn.microsoft.com/en-us/dotnet/api/system.componentmodel.dataannotations">DataAnnotations</a> are covered in a later tutorial.
 
+#### Scaffold the movie model
+
+```
+dotnet aspnet-codegenerator razorpage -m Movie -dc RazorPagesMovie.Data.RazorPagesMovieContext -udl -outDir Pages/Movies --referenceScriptLibraries --databaseProvider sqlite
+```
+The following table details the ASP.NET Core code generator options.
+| Option                     | Description                                             |
+| -------------------------- | ------------------------------------------------------- |
+| -m                         | The name of the model.                                  |
+| -dc                        | The DbContext class to use including namespace.         |
+| -udl                       | Use the default layout.                                 |
+| -outDir                    | The relative output folder path to create the views.    |
+| --referenceScriptLibraries | Adds _ValidationScriptsPartial to Edit and Create pages |
+
+#### Use SQLite for development, SQL Server for production
+
+When SQLite is selected, the template generated code is ready for development. The following code shows how to select the SQLite connection string in development and SQL Server in production.
+
+##### Program.cs
+```
+...
+builder.Services.AddRazorPages();
+
+if (builder.Environment.IsDevelopment())
+{
+    builder.Services.AddDbContext<RazorPagesMovieContext>(options =>
+        options.UseSqlite(builder.Configuration.GetConnectionString("RazorPagesMovieContext")));
+}
+else
+{
+    builder.Services.AddDbContext<RazorPagesMovieContext>(options =>
+        options.UseSqlServer(builder.Configuration.GetConnectionString("ProductionMovieContext")));
+}
+...
+```
+
+#### Create the initial database schema using EF's migration feature
+Run the following .NET CLI command:
+.NET CLI
+```
+dotnet ef migrations add InitialCreate
+```
+The <mark>migrations</mark> command generates code to create the initial database schema. The schema is based on the model specified in <mark>DbContext</mark>. The <mark>InitialCreate</mark> argument is used to name the migrations. Any name can be used, but by convention a name is selected that describes the migration.
+
+Run the following .NET CLI command:
+.NET CLI
+```
+dotnet ef database update
+```
+The <mark>update</mark> command runs the <mark>Up</mark> method in migrations that have not been applied. In this case, <mark>update</mark> runs the <mark>Up</mark> method in the <mark>Migrations/\<time-stamp>_InitialCreate.cs</mark> file, which creates the database.
 </body>
