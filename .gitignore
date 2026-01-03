@@ -3,3 +3,6 @@ users.json
 .fake
 bin/
 obj/
+
+.db-shm
+.db-wal
