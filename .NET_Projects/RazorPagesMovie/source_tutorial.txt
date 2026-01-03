@@ -2,4 +2,4 @@ Full tutorial:
 https://learn.microsoft.com/en-us/aspnet/core/tutorials/razor-pages/razor-pages-start?view=aspnetcore-10.0&tabs=visual-studio-code
 
 Next part of tutorial:
-https://learn.microsoft.com/en-us/aspnet/core/tutorials/razor-pages/sql?view=aspnetcore-10.0&tabs=visual-studio-code
+https://learn.microsoft.com/en-us/aspnet/core/tutorials/razor-pages/da1?view=aspnetcore-10.0
