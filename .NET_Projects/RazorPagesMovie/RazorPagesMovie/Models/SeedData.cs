@@ -25,34 +25,11 @@ public static class SeedData
             context.Movie.AddRange(
                 new Movie
                 {
-                    Title = "When Harry Met Sally",
-                    ReleaseDate = DateTime.Parse("1989-2-12"),
-                    Genre = "Romantic Comedy",
-                    Length = 95
-                },
-
-                new Movie
-                {
-                    Title = "Ghostbusters",
-                    ReleaseDate = DateTime.Parse("1984-3-13"),
-                    Genre = "Comedy",
-                    Length = 105
-                },
-
-                new Movie
-                {
-                    Title = "Ghostbusters 2",
-                    ReleaseDate = DateTime.Parse("1986-2-23"),
-                    Genre = "Comedy",
-                    Length = 108
-                },
-
-                new Movie
-                {
-                    Title = "Rio Bravo",
-                    ReleaseDate = DateTime.Parse("1959-4-15"),
-                    Genre = "Western",
-                    Length = 141 
+                    Id    = 0,
+                    Title = "The Matrix",
+                    ReleaseDate = DateTime.Parse("1999-3-31"),
+                    Genre = "Action, Science Fiction",
+                    Length = 136 
                 }
             );
             context.SaveChanges();

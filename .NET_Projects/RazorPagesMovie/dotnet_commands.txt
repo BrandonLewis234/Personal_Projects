@@ -2,5 +2,5 @@ dotnet restore
 dotnet build
 dotnet watch
 
-# Run when changing/deleting/updating the database internally.
+# Run when changing/deleting the database internally.
 dotnet ef database update
