@@ -84,4 +84,53 @@ Run the following .NET CLI command:
 dotnet ef database update
 ```
 The <mark>update</mark> command runs the <mark>Up</mark> method in migrations that have not been applied. In this case, <mark>update</mark> runs the <mark>Up</mark> method in the <mark>Migrations/\<time-stamp>_InitialCreate.cs</mark> file, which creates the database.
+
+#### <mark>Program.cs</mark>
+```
+using Microsoft.EntityFrameworkCore;
+using RazorPagesMovie.Data;
+using RazorPagesMovie.Models;
+
+var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddRazorPages();
+builder.Services.AddDbContext<RazorPagesMovieContext>(options =>
+    options.UseSqlite(builder.Configuration.GetConnectionString("RazorPagesMovieContext") ?? throw new InvalidOperationException("Connection string 'RazorPagesMovieContext' not found.")));
+
+var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+
+    SeedData.Initialize(services);
+}
+
+if (!app.Environment.IsDevelopment())
+{
+    app.UseExceptionHandler("/Error");
+    app.UseHsts();
+}
+
+app.UseHttpsRedirection();
+
+app.UseRouting();
+
+app.UseAuthorization();
+
+app.MapStaticAssets();
+app.MapRazorPages();
+
+app.Run();
+```
+In the previous code, <mark>Program.cs</mark> has been modified to do the following:
+- Get a database context instance from the dependency injection (DI) container.
+- Call the <mark>seedData.Initialize</mark> method, passing to it the database context instance.
+- Dispose the context when the seed method completes. The using statement ensures the context is disposed.
+
+The following exception occurs when <mark>Update-Database</mark> has not been run:
+
+>SqlException: Cannot open database "RazorPagesMovieContext-" requested by the login. The login failed. Login failed for user 'user name'.
+
+
 </body>
